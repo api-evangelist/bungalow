@@ -1,0 +1,103 @@
+generated: '2026-08-01'
+method: searched
+source: https://fieldstone.bungalow.com/api/v1/docs/#section/Lead-Capture
+spec_type: none
+asyncapi: null
+note: >-
+  Bungalow publishes NO AsyncAPI document (probed /asyncapi.yaml, /asyncapi.json on both hosts and
+  searched the API reference and GitHub — nothing). It publishes exactly one webhook contract, and
+  it is INBOUND: the partner posts a lead to Bungalow, rather than Bungalow notifying the partner of
+  an event. That direction is recorded explicitly below so this artifact is not mistaken for an
+  outbound event stream. Bungalow ships no outbound event notifications of any kind — a partner who
+  needs to know that a listing changed must poll /listings/properties/ on the ~10-minute cadence the
+  docs recommend.
+webhooks:
+- name: lead-capture
+  direction: inbound
+  producer: integration partner (third-party listing site or rental portal)
+  consumer: Bungalow
+  purpose: >-
+    "When a lead shows interest in one of our properties on your platform, in order to have the best
+    possible lead experience, we ask that you send us a webhook with the lead data included."
+  endpoint:
+    url: null
+    provisioning: >-
+      Per-partner. "In order to have a webhook configured for your platform, please send us a
+      request to integrations@bungalow.com." The endpoint URL is not published.
+  contact: integrations@bungalow.com
+  content_types:
+  - application/json
+  - application/x-www-form-urlencoded
+  note_content_type: '"Our webhook endpoint is flexible for data format and can support JSON or url-form-encoded formatting."'
+  casing: '"Casing is flexible, but snake_case is recommended."'
+  required_fields:
+  - name: property_id
+    description: The id of the property/listing object
+  - name: name
+    description: Name of lead; may be supplied as `name`, or as `first_name` and `last_name`
+    alternatives: [first_name, last_name]
+  - name: email
+    description: Email of lead
+  optional_fields:
+  - phone
+  - bio
+  - max_budget
+  - desired_move_in_date
+  - student
+  - work
+  - school
+  - hobbies
+  example_payload: |
+    {
+      "property_id": "49801887334039362",
+      "property_name": "spacious-san-mateo-renovation-near",
+      "first_name": "Sterling",
+      "last_name": "Archer",
+      "email": "sarcher@example.com",
+      "phone": "5551234567",
+      "bio": "...",
+      "max_budget": 1500,
+      "desired_move_in_date": "06-01-2020",
+      "student": false,
+      "work": "CIA",
+      "school": "Georgetown University",
+      "hobbies": ["travel", "sports", "foodie"]
+    }
+  example_source: verbatim from the published API reference (values are the provider's own sample)
+  authentication: partner-provisioned, not published
+  signing: not documented
+  retry_policy: not documented
+  related_rest_operation:
+    operationId: /applications/source/
+    note: >-
+      POST /applications/source/ is the synchronous, self-serve equivalent of the lead-capture
+      webhook — it takes first_name/last_name/email/market and returns a public application URL.
+      Partners without a provisioned webhook can use it instead.
+outbound_events:
+  published: false
+  probed:
+  - {url: 'https://fieldstone.bungalow.com/asyncapi.yaml', http_status: 404}
+  - {url: 'https://fieldstone.bungalow.com/asyncapi.json', http_status: 404}
+  - {url: 'https://bungalow.com/asyncapi.yaml', http_status: 404}
+  polling_alternative:
+    endpoint: GET /listings/properties/?market__slug=<slug>
+    cadence: >-
+      "Results are updated approximately every 10 minutes so any polling done on these endpoints
+      should aim to match that timeframe where possible. Since pricing can change dynamically we
+      recommend not waiting longer than 24 hrs to pull new results."
+feeds:
+  note: >-
+    The nearest thing to a push/bulk surface is the authenticated XML feed set, which is a pull feed
+    rather than an event stream.
+  formats:
+  - id: hotpads
+    spec: https://filenet.hotpads.com/+guides/RentalListingsFeedGuide.pdf
+    status: available to approved partners
+  - id: facebook-catalog
+    spec: https://developers.facebook.com/docs/marketing-api/real-estate-ads/#feed-xml-example
+    status: available to approved partners
+  - id: mits
+    spec: https://www.retall.org/wp-content/uploads/2019/04/Property-Marketing-ILS-4.1-Supplemental.html
+    status: stated future intent
+  access: integrations@bungalow.com
+  advantage: '"since they are authenticated, we can provide a broader range of fields than the public JSON API does"'

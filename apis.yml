@@ -1,18 +1,79 @@
 aid: bungalow
 name: Bungalow
-description: 'Bungalow is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Bungalow is a US residential rental platform for single-family homes, operating both a co-living
+  ("Coliving Home") product where individual rooms in a house are leased to separately screened
+  housemates and a whole-home ("Group Home") product leased to a single group. Founded in 2017 by
+  Andrew Collins and Justin McCarty and headquartered in Miami, FL, the company pairs a renter-facing
+  marketplace and mobile app with a homeowner property-management portal and an SFR investment service
+  ("Radar Powered by Bungalow") covering sourcing, underwriting, renovation and management. Bungalow
+  publishes a small, anonymous, read-mostly public REST API — the Bungalow API at
+  fieldstone.bungalow.com — so that third-party listing sites, rental search portals and partner
+  platforms can syndicate its markets and property listings, retrieve showing availability, book a
+  showing, and submit an application source. Authenticated Hotpads and Facebook Catalog XML feeds are
+  offered to approved integration partners as a richer alternative, and partners are asked to post
+  lead-capture webhooks back to Bungalow. Active in roughly 23 markets across the United States.
+image: https://assets.bungalow.com/home-page/header/header-hero-min.png?h=630&w=1200&auto=format
 url: https://raw.githubusercontent.com/api-evangelist/bungalow/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-01'
 modified: '2026-08-01'
 tags:
 - Company
-apis: []
+- real-estate
+- residential-real-estate
+- rental-listings
+- property-management
+- co-living
+- single-family-rental
+- listings-syndication
+- housing
+- proptech
+- marketplace
+apis:
+- name: Bungalow API
+  description: >-
+    Anonymous, read-mostly public REST API for syndicating Bungalow's residential rental inventory.
+    Covers markets (23 active US metros with geo bounds, timezone and rent premiums), marketable
+    property listings filtered by market slug, neighborhood, amenities and price, single-property
+    detail by id or slug, showing-availability grids, showing creation, and application-source
+    submission. JSON over HTTPS with limit/offset pagination, a structured error envelope, and URI
+    path versioning (/api/v1/). Authenticated Hotpads and Facebook Catalog XML feeds are available to
+    approved partners via integrations@bungalow.com.
+  humanURL: https://fieldstone.bungalow.com/api/v1/docs/
+  baseURL: https://fieldstone.bungalow.com/api/v1/
+  tags:
+  - real-estate
+  - rental-listings
+  - listings-syndication
+  - property-management
+  - co-living
+  - single-family-rental
+  - housing
+  - proptech
+  properties:
+  - type: Documentation
+    url: https://fieldstone.bungalow.com/api/v1/docs/
+  - type: APIReference
+    url: https://fieldstone.bungalow.com/api/v1/docs/
+  - type: GettingStarted
+    url: https://fieldstone.bungalow.com/api/v1/docs/#section/Getting-Started
+  - type: OpenAPI
+    url: openapi/bungalow-openapi-original.yml
+  - type: Overlay
+    url: overlays/bungalow-openapi-original-overlay.yaml
+  - type: Authentication
+    url: authentication/bungalow-authentication.yml
+  - type: Conventions
+    url: conventions/bungalow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/bungalow-problem-types.yml
+  - type: DataModel
+    url: data-model/bungalow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/bungalow-webhooks.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +81,63 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://forgeglobal.com/bungalow_stock/
+  url: https://bungalow.com/
+- type: DeveloperPortal
+  url: https://fieldstone.bungalow.com/api/v1/docs/
+- type: Documentation
+  url: https://fieldstone.bungalow.com/api/v1/docs/
+- type: APIReference
+  url: https://fieldstone.bungalow.com/api/v1/docs/
+- type: GettingStarted
+  url: https://fieldstone.bungalow.com/api/v1/docs/#section/Getting-Started
+- type: Support
+  url: https://bungalow.com/faq
+- type: HelpCenter
+  url: https://bungalow.com/help
+- type: Blog
+  url: https://bungalow.com/articles
+- type: SignUp
+  url: https://bungalow.com/signup
+- type: Login
+  url: https://bungalow.com/login
+- type: TermsOfService
+  url: https://bungalow.com/terms-of-use
+- type: PrivacyPolicy
+  url: https://bungalow.com/privacy-policy
+- type: About
+  url: https://bungalow.com/about
+- type: Press
+  url: https://bungalow.com/press
+- type: Careers
+  url: https://bungalow.com/careers
+- type: OpenAPI
+  url: openapi/bungalow-openapi-original.yml
+- type: Overlay
+  url: overlays/bungalow-openapi-original-overlay.yaml
+- type: Authentication
+  url: authentication/bungalow-authentication.yml
+- type: Conventions
+  url: conventions/bungalow-conventions.yml
+- type: ErrorCatalog
+  url: errors/bungalow-problem-types.yml
+- type: DataModel
+  url: data-model/bungalow-data-model.yml
+- type: Lifecycle
+  url: lifecycle/bungalow-lifecycle.yml
+- type: Conformance
+  url: conformance/bungalow-conformance.yml
+- type: Webhooks
+  url: asyncapi/bungalow-webhooks.yml
+- type: ToolCrosswalk
+  url: mcp/bungalow-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/bungalow-llms.txt
+- type: DomainSecurity
+  url: security/bungalow-domain-security.yml
+x-enrichment:
+  date: '2026-08-01'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1

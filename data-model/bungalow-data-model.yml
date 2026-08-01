@@ -1,0 +1,243 @@
+generated: '2026-08-01'
+method: derived
+source: openapi/bungalow-openapi-original.yml
+docs: https://fieldstone.bungalow.com/api/v1/docs/
+note: >-
+  Derived from the OpenAPI response schemas. The spec declares ZERO components.schemas — every
+  entity below is an inline, anonymous schema repeated per operation, so there is no $ref graph to
+  walk. The relationships are recovered from nested object/array properties and from the id/slug
+  reference fields used by the write operations. Bungalow's model is proprietary; it is not
+  RESO-shaped (see conformance/bungalow-conformance.yml).
+identifiers:
+  style: opaque numeric-string snowflake ids plus human slugs
+  observed_example:
+    market_id: '715194178910805703'
+    market_slug: atlanta
+  note: >-
+    ids are declared `type: integer` in the spec but are returned as decimal STRINGS on the wire
+    (verified GET /markets/?limit=3 on 2026-08-01) — a real spec/runtime divergence clients must
+    handle. Properties are addressable by either id or slug via {id_or_slug}.
+entities:
+- name: Market
+  description: >-
+    A generalized geographical area, usually a city (Seattle, Boston) but sometimes a broader metro
+    (Bay Area). 23 active markets observed 2026-08-01.
+  primary_key: id
+  natural_key: slug
+  operations: ['/markets/', '/markets/{id}']
+  fields:
+  - {name: id, type: integer, readOnly: true}
+  - {name: internal_name, type: string, required: true}
+  - {name: display_name, type: string, required: true}
+  - {name: slug, type: string, nullable: true, pattern: '^[-a-zA-Z0-9_]+$'}
+  - {name: email, type: string, note: 'market-specific inbox, e.g. atlantarentals@bungalow.com'}
+  - {name: region, type: string}
+  - {name: region_code, type: string, maxLength: 3}
+  - {name: country, type: string}
+  - {name: country_code, type: string, format: ISO 3166-1 alpha-2}
+  - {name: img, type: uri}
+  - {name: img_md, type: uri}
+  - {name: hide_room_details, type: boolean}
+  - {name: timezone, type: string, format: IANA tz}
+  - {name: latitude, type: string}
+  - {name: longitude, type: string}
+  - {name: market_info, type: string, readOnly: true}
+  - {name: support_operating_hours, type: string, readOnly: true}
+  - {name: waive_application_fees, type: boolean, required: true}
+  detail_only:
+  - name: demand metrics
+    note: >-
+      'Gets all details of a market, and includes demand metrics' — the detail operation is
+      documented as richer than the list operation.
+- name: MarketArea
+  description: >-
+    A bounded geographic area with a centerpoint and a geohash prefix. Reused for both the market
+    footprint (Market.market_area) and neighborhoods (Property.neighborhood_area) — area_type
+    discriminates ('Type of area, e.g Neighborhood, Market, et. al').
+  primary_key: id
+  natural_key: slug
+  embedded_only: true
+  fields:
+  - {name: id, type: integer, readOnly: true}
+  - {name: slug, type: string, nullable: true}
+  - {name: name, type: string, required: true}
+  - {name: area_type, type: string, nullable: true}
+  - {name: geohash, type: string, maxLength: 9}
+  - {name: bounds_north, type: number, required: true}
+  - {name: bounds_south, type: number, required: true}
+  - {name: bounds_west, type: number, required: true}
+  - {name: bounds_east, type: number, required: true}
+  - {name: latitude, type: number, required: true}
+  - {name: longitude, type: number, required: true}
+- name: RentPremium
+  description: Lease-length-dependent monthly premium schedule attached to a Market.
+  embedded_only: true
+  fields:
+  - {name: lease_length_in_months, type: integer, required: true}
+  - {name: premium_per_month, type: number, required: true}
+- name: Property
+  description: >-
+    A marketable home. property_marketing_type discriminates the two products — `co_living`
+    (individual rooms leased separately, priced via room_prices) and `group_living` (whole home,
+    priced via full_property_price).
+  primary_key: id
+  natural_key: slug
+  operations: ['/listings/properties/', '/listings/properties/{id_or_slug}']
+  discriminator:
+    field: property_marketing_type
+    values: [co_living, group_living]
+    pricing_branch:
+      co_living: room_prices
+      group_living: full_property_price
+  fields_list_and_detail:
+  - id
+  - slug
+  - headline
+  - is_coming_soon
+  - coming_soon_date
+  - num_bathrooms
+  - sqft
+  - address           # {city, county, neighborhood, latitude, longitude}
+  - street_address    # full address only for group_living; obfuscated for co_living
+  - amenities
+  - images            # [{sm_url, md_url, lg_url, caption, order, staged_bedroom, is_floorplan}]
+  - roommate_shared_interests
+  - total_room_count
+  - available_room_count
+  - earliest_available_date
+  - room_prices
+  - full_property_price
+  - property_marketing_type
+  - retail_property
+  - next_open_house
+  - promotions
+  - prev_prices
+  - showing_today
+  - automated_tour_compatible
+  - showdigs_showing_enabled
+  - parking_spots_available
+  - is_instant_lease
+  - demand_leases_end_date
+  - is_featured
+  fields_detail_only:
+  - description_html
+  - matterport_url
+  - walkthrough_video_url
+  - is_premarketing
+  - transfer_eligible
+  - attributes
+  - roommates
+  - roommate_living_preferences
+  - rooms
+  - room_images
+  - showing_times_today
+  - showings_available
+  - is_meet_and_greet_available
+  - calendly_url
+  - calendly_url_active
+  - sfid
+  fields_list_only:
+  - room_amenities
+  - neighborhood_area
+  privacy_rules:
+  - Co-living addresses are obfuscated and lat/long fidelity is reduced.
+  - Full street_address is provided only for whole-home (group_living) rentals.
+  freshness:
+    note: >-
+      total_room_count, available_room_count, full_property_price, demand_leases_end_date and
+      showing_today are annotated in the spec as 'Set by update_property_listings task / 10min'.
+- name: HouseProfile
+  description: Household composition and preference profile attached to a co-living Property.
+  embedded_only: true
+  fields: [id, description, tags, esa_cat, esa_dog, gender_preferences, min_age, max_age]
+  note: gender_preferences carries {id, name, pronouns[]}.
+- name: ShowingAvailability
+  description: >-
+    A per-property availability grid: timezone, day-bucketed availability_periods each containing
+    bookable timeslots, plus an optional instant_chat_timeslot.
+  operations: ['/listings/showings/availability/{id}/']
+  fields:
+  - {name: timezone_name, type: string}
+  - {name: timezone_utc_offset, type: integer}
+  - {name: availability_periods, type: array, items: 'AvailabilityPeriod{day_start, timeslots[]}'}
+  - {name: instant_chat_available, type: boolean}
+  - {name: instant_chat_timeslot, type: Timeslot, nullable: true}
+- name: Timeslot
+  description: A bookable showing window. job_id joins an existing showing job (group showings).
+  embedded_only: true
+  fields:
+  - {name: start_time, type: date-time, required: true}
+  - {name: end_time, type: date-time, required: true}
+  - {name: job_id, type: string, nullable: true, required: true}
+  - {name: resource_ids, type: array, required: true}
+- name: Showing
+  description: A booked property tour, in-person or virtual, individual or group.
+  primary_key: id
+  operations: ['/listings/showings/']
+  write_fields:
+    required: [property, start_time, end_time]
+    optional:
+    - user_email
+    - user_name
+    - user_phonenumber
+    - user_short_bio
+    - job_id
+    - is_virtual
+    - is_group
+    - utm_source
+    - utm_campaign
+    - utm_medium
+    - utm_term
+    - utm_content
+    - gclid
+  read_fields:
+  - {name: id, readOnly: true}
+  - {name: video_link, readOnly: true, note: Video link for connecting leads and showing agents}
+  - {name: fsa_name, readOnly: true, note: Name of the agent doing the showing}
+  - {name: fsa_photo, readOnly: true}
+  - {name: market_contact_email, readOnly: true}
+  - {name: attendee_name, readOnly: true}
+  - {name: attendee_email, readOnly: true}
+  - {name: showing_start_time, readOnly: true}
+- name: ApplicationSource
+  description: >-
+    A lead/application record attributed to a source. 'Being signed in is not required.' Returns a
+    public view carrying a url the applicant can be sent to.
+  operations: ['/applications/source/']
+  write_fields:
+    required: [first_name, last_name, email, market]
+    optional: [middle_name, property, extra]
+  read_fields:
+  - {name: middle_name, nullable: true}
+  - {name: url, readOnly: true}
+relationships:
+- {from: Market, to: MarketArea, kind: has_one, via: market_area}
+- {from: Market, to: RentPremium, kind: has_many, via: rent_premiums}
+- {from: Property, to: Market, kind: belongs_to, via: market}
+- {from: Property, to: MarketArea, kind: has_one, via: neighborhood_area, note: 'area_type = Neighborhood'}
+- {from: Property, to: HouseProfile, kind: has_one, via: house_profile}
+- {from: Property, to: Image, kind: has_many, via: images}
+- {from: Property, to: Room, kind: has_many, via: rooms, note: 'detail only; serialized as an opaque readOnly string in the spec'}
+- {from: ShowingAvailability, to: Property, kind: belongs_to, via: 'path {id}'}
+- from: ShowingAvailability
+  to: Timeslot
+  kind: has_many
+  via: 'availability_periods[].timeslots'
+- {from: Showing, to: Property, kind: belongs_to, via: property}
+- {from: Showing, to: Timeslot, kind: belongs_to, via: 'start_time + end_time + job_id'}
+- {from: ApplicationSource, to: Market, kind: belongs_to, via: market, required: true}
+- {from: ApplicationSource, to: Property, kind: belongs_to, via: property, required: false}
+traversal:
+  canonical_path: >-
+    GET /markets/ -> take market.slug -> GET /listings/properties/?market__slug=<slug> ->
+    take property id/slug -> GET /listings/properties/{id_or_slug} ->
+    GET /listings/showings/availability/{id}/ -> POST /listings/showings/
+  note: >-
+    market__slug is a REQUIRED query parameter on the listings list operation, so /markets/ is the
+    mandatory entry point of the graph — there is no way to enumerate all properties globally.
+gaps:
+  components_schemas: 0
+  note: >-
+    Every schema is inline and duplicated across operations (the Market object appears in full four
+    times). Extracting components.schemas and $ref-ing them would materially raise the contract
+    quality score and is the second-highest-leverage spec fix after adding error responses.

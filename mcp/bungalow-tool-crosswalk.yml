@@ -1,0 +1,101 @@
+generated: '2026-08-01'
+method: derived
+source: mcp/bungalow-mcp.yml + openapi/bungalow-openapi-original.yml
+status: candidate
+note: >-
+  Bungalow publishes no MCP server and no GraphQL endpoint, so this crosswalk binds the CANDIDATE
+  tool set in mcp/bungalow-mcp.yml to the REST operations it was derived from. Every binding is
+  1:1 and high confidence by construction — the tools were generated from the operations, not
+  reconciled against a published tool list. There are no mcp_only rows and no rest_only rows: the
+  candidate surface is exactly the published surface. This file exists so that the tool layer stays
+  bound to the machine-readable contract if and when Bungalow ships a real server.
+surfaces:
+  openapi:
+    file: openapi/bungalow-openapi-original.yml
+    live: https://fieldstone.bungalow.com/api/v1/open-api-schema/
+    version: 3.0.2
+    gated: false
+    verified: '2026-08-01'
+  graphql:
+    endpoint: null
+    gated: null
+    note: 'Probed https://bungalow.com/graphql (404) and /api/graphql (404). No GraphQL surface.'
+  mcp:
+    url: null
+    gated: null
+    note: No hosted MCP server exists. tools/list was not probed because there is no endpoint.
+  xml_feeds:
+    formats: [hotpads, facebook-catalog]
+    gated: true
+    note: >-
+      Partner-authenticated. Documented as carrying "a broader range of fields than the public JSON
+      API does" — so the feed surface is a genuine superset of REST that no tool can reach without
+      partner credentials. Recorded here rather than dropped.
+crosswalk:
+- tool: list_markets
+  category: geography
+  rest: ['/markets/']
+  binding: rest
+  confidence: high
+  note: 1:1. Input schema is the operation's limit/offset query parameters.
+- tool: get_market
+  category: geography
+  rest: ['/markets/{id}']
+  binding: rest
+  confidence: high
+  note: 1:1. Detail operation is documented as returning demand metrics the list operation omits.
+- tool: search_listings
+  category: inventory
+  rest: ['/listings/properties/']
+  binding: rest
+  confidence: high
+  note: >-
+    1:1. Inherits all 19 query parameters; market__slug is required, which makes list_markets a hard
+    prerequisite.
+- tool: get_listing
+  category: inventory
+  rest: ['/listings/properties/{id_or_slug}']
+  binding: rest
+  confidence: high
+  note: 1:1. Accepts either the numeric id or the slug on the same path parameter.
+- tool: get_showing_availability
+  category: scheduling
+  rest: ['/listings/showings/availability/{id}/']
+  binding: rest
+  confidence: high
+  note: 1:1. {id} is the PROPERTY id, not a showing id.
+- tool: book_showing
+  category: scheduling
+  rest: ['/listings/showings/']
+  binding: rest
+  confidence: high
+  note: >-
+    1:1 write. Inherits requestBody (property, start_time, end_time required). Non-idempotent; 410
+    APIGoneError is the documented response when the timeslot has been taken.
+- tool: submit_application_source
+  category: leasing
+  rest: ['/applications/source/']
+  binding: rest
+  confidence: high
+  note: 1:1 write. Inherits requestBody (first_name, last_name, email, market required).
+mcp_only: []
+rest_only: []
+coverage:
+  tools_named: 7
+  tools_bound: 7
+  mcp_only: 0
+  rest_ops_total: 7
+  rest_ops_with_a_tool: 7
+  binding_rate: 1.0
+divergences:
+- surface: xml_feeds
+  kind: capability not reachable from REST or any tool
+  detail: >-
+    The authenticated Hotpats/Facebook Catalog feeds expose fields the public JSON API does not.
+    Any agent built on the REST surface alone sees a strictly smaller record than a credentialed
+    feed partner does.
+- surface: webhooks
+  kind: inbound only
+  detail: >-
+    The only webhook contract is partner -> Bungalow lead capture. There is no outbound event a tool
+    could subscribe to, so a change-detection agent must poll. See asyncapi/bungalow-webhooks.yml.

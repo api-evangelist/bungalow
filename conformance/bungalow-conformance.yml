@@ -1,0 +1,119 @@
+generated: '2026-08-01'
+method: derived
+source: openapi/bungalow-openapi-original.yml
+docs: https://fieldstone.bungalow.com/api/v1/docs/
+note: >-
+  Derived from the harvested OpenAPI plus the published API reference. Bungalow publishes no
+  certifications, no trust center and no compliance program (probe-security-programs.py returned
+  vdp=none trust=none on 2026-08-01), so NO `Compliance` pointer is wired.
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: >-
+    openapi/bungalow-openapi-original.yml declares `openapi: 3.0.2` and is served live as
+    application/vnd.oai.openapi at https://fieldstone.bungalow.com/api/v1/open-api-schema/
+- id: rest
+  conforms: true
+  evidence: >-
+    'This API is, for the most part, based on REST principles. It uses HTTP response codes to
+    indicate errors and HTTP verbs to describe requests.'
+- id: json
+  conforms: true
+  evidence: All responses are application/json, including errors.
+- id: semver
+  conforms: true
+  evidence: >-
+    'We use semantic versioning so within major versions you do not have to worry about changes
+    breaking backward compatibility.'
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Proprietary {"error": {code, type, message, ...}} envelope; no application/problem+json media
+    type anywhere in the spec or docs.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No deprecation policy or Sunset/Deprecation header support documented.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns the SPA HTML shell on bungalow.com and 404 on
+    fieldstone.bungalow.com. See well-known/bungalow-well-known.yml.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 securityScheme in the spec and no /.well-known/oauth-authorization-server. The docs
+    reference access/refresh tokens for authenticated surfaces but publish no authorization server.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on both hosts.
+- id: json-api
+  conforms: false
+  evidence: Plain JSON objects; no data/attributes/relationships envelope, no application/vnd.api+json.
+- id: odata
+  conforms: false
+  evidence: No $metadata, $filter or $select surface.
+- id: rfc5988-web-linking
+  conforms: false
+  evidence: >-
+    Pagination links are carried in the JSON body (next/previous) rather than in a Link header.
+- id: retry-after
+  conforms: true
+  evidence: >-
+    'In the case of a throttled request, a Retry-After header will specify how long the user should
+    wait before trying the API call again.'
+- id: idempotency-key
+  conforms: false
+  evidence: >-
+    No idempotency key header, no de-duplication window. Both POST operations are non-idempotent.
+    See conventions/bungalow-conventions.yml.
+- id: pagination
+  conforms: true
+  style: limit-offset
+  evidence: >-
+    Standardised across all resource listing endpoints — limit (default 20, max 100) / offset
+    (default 0), response {results, count, next, previous}.
+- id: hotpads-rental-listings-feed
+  conforms: true
+  scope: partner-gated
+  evidence: >-
+    'we currently offer feeds in two formats: Hotpads and Facebook Catalog' — a worked hotPadsItems
+    version="2.1" example is published in the API reference. Access via integrations@bungalow.com.
+  reference: https://filenet.hotpads.com/+guides/RentalListingsFeedGuide.pdf
+- id: facebook-catalog-real-estate-feed
+  conforms: true
+  scope: partner-gated
+  evidence: Listed alongside Hotpads as a supported authenticated feed format.
+  reference: https://developers.facebook.com/docs/marketing-api/real-estate-ads/#feed-xml-example
+- id: mits-property-marketing-ils-4.1
+  conforms: false
+  status: stated-future-intent
+  evidence: '"MITS may be supported in the future."'
+  reference: https://www.retall.org/wp-content/uploads/2019/04/Property-Marketing-ILS-4.1-Supplemental.html
+- id: reso-data-dictionary
+  conforms: false
+  evidence: >-
+    No RESO Data Dictionary or Web API alignment. Bungalow's listing model is proprietary
+    (property_marketing_type / room_prices / full_property_price), not RESO-shaped.
+- id: iso-3166-1-alpha-2
+  conforms: true
+  evidence: >-
+    Market schema field country_code is described as "Alpha-2 ISO 3166 code" (maxLength 2).
+- id: geohash
+  conforms: true
+  evidence: >-
+    market_area.geohash — 'The geohash prefix that falls in and round this area (ideal for filtering
+    in a client interface).'
+- id: iana-timezone-database
+  conforms: true
+  evidence: Market schema carries a `timezone` string field.
+- id: rfc3339-datetimes
+  conforms: true
+  evidence: >-
+    Showing start_time/end_time and the published Hotpads example lastUpdated
+    (2020-06-04T19:46:37.268526+00:00) use ISO 8601 / RFC 3339 form.
+compliance_program:
+  published: false
+  certifications: []
+  trust_center: null
+  vulnerability_disclosure: null
+  evidence: probe-security-programs.py 2026-08-01 -> vdp=none trust=none

@@ -1,0 +1,41 @@
+generated: '2026-08-01'
+method: generated
+source: openapi/bungalow-openapi-original.yml + https://fieldstone.bungalow.com/api/v1/docs/
+note: >-
+  Bungalow publishes no AGENTS.md and no skill files (searched bungalow.com, its 2.2 MB sitemap, the
+  API reference and GitHub on 2026-08-01). These three skills are GENERATED from the seven published
+  operations and the docs' conventions/errors sections. Every operationId referenced is verbatim
+  from openapi/bungalow-openapi-original.yml — Bungalow's operationIds are path-shaped
+  (e.g. "/listings/showings/"), which is unusual but is what the spec declares.
+skills:
+- file: bungalow-syndicate-listings.md
+  name: Syndicate Bungalow rental listings
+  api: openapi/bungalow-openapi-original.yml
+  operations:
+  - "/markets/"
+  - "/listings/properties/"
+  - "/listings/properties/{id_or_slug}"
+  read_only: true
+- file: bungalow-book-a-showing.md
+  name: Book a Bungalow property showing
+  api: openapi/bungalow-openapi-original.yml
+  operations:
+  - "/markets/"
+  - "/listings/properties/"
+  - "/listings/showings/availability/{id}/"
+  - "/listings/showings/"
+  read_only: false
+  human_in_the_loop: required
+- file: bungalow-capture-a-lead.md
+  name: Capture a Bungalow rental lead
+  api: openapi/bungalow-openapi-original.yml
+  operations:
+  - "/markets/"
+  - "/listings/properties/"
+  - "/applications/source/"
+  read_only: false
+  human_in_the_loop: required
+  pii: true
+coverage:
+  operations_total: 7
+  operations_covered: 7

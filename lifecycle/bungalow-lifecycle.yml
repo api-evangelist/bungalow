@@ -1,0 +1,63 @@
+generated: '2026-08-01'
+method: searched
+source: https://fieldstone.bungalow.com/api/v1/docs/#section/Versioning
+versioning:
+  scheme: uri-path
+  current: v1
+  pattern: /api/v1/path/to/specific/endpoint
+  policy: semver
+  statement: >-
+    "You can control what version of the API you access by manipulating the path... We use semantic
+    versioning so within major versions you do not have to worry about changes breaking backward
+    compatibility."
+  docs: https://fieldstone.bungalow.com/api/v1/docs/#section/Versioning
+  spec_info_version: ''
+  note: >-
+    The OpenAPI's info.version is an empty string, so the only version signal is the /api/v1/ path
+    segment and the semver statement in prose.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: unknown
+  deprecation_header: unknown
+  note: >-
+    No deprecation policy, no sunset window, and no RFC 8594 Sunset/Deprecation header support is
+    documented. The backward-compatibility promise is scoped to "within major versions" with no
+    stated notice period for a major bump. No Deprecation pointer is wired in apis.yml.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page:
+  url: null
+  published: false
+  probed:
+  - {url: 'https://status.bungalow.com/', result: NXDOMAIN}
+  - {url: 'https://bungalow.com/status', http_status: 404}
+  note: No status page found. No StatusPage pointer is wired in apis.yml.
+changelog:
+  url: null
+  published: false
+  note: >-
+    No dated changelog was found in the API reference, on bungalow.com, or in the sitemap
+    (2,275,607-byte sitemap.xml scanned 2026-08-01 — it carries only marketing, market, listing and
+    article routes). No changelog/ artifact is emitted.
+data_freshness:
+  listings_refresh: ~10 minutes
+  recommended_max_staleness: 24 hours
+  source: https://fieldstone.bungalow.com/api/v1/docs/#tag/Listings
+support:
+  integrations_contact: integrations@bungalow.com
+  note: >-
+    The documented channel for partner onboarding (XML feed access, webhook configuration) is email
+    to integrations@bungalow.com. There is no developer forum, ticketing system or public issue
+    tracker.
+partner_onboarding:
+  self_serve_json_api: true
+  self_serve_note: The public JSON API requires no signup, no key and no agreement.
+  gated_surfaces:
+  - Hotpads XML feed
+  - Facebook Catalog XML feed
+  - Lead-capture webhook configuration
+  future_support: [MITS Property Marketing ILS 4.1]

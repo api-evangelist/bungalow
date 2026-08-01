@@ -1,0 +1,129 @@
+generated: '2026-08-01'
+method: searched
+source: https://fieldstone.bungalow.com/api/v1/docs/#section/Errors
+derived_from: openapi/bungalow-openapi-original.yml
+format: proprietary
+rfc9457: false
+note: >-
+  Bungalow does NOT use RFC 9457 application/problem+json. It publishes its own error envelope,
+  documented in full in the API reference. The OpenAPI itself declares only 200 responses on all
+  seven operations, so nothing here could be derived from the spec — this catalog is searched from
+  the docs' Errors section, which is materially richer than the machine-readable contract.
+envelope:
+  content_type: application/json
+  root_key: error
+  fields:
+    code: HTTP response code, repeated in the body for browsability
+    type: Short string naming the error class (see problems[] below)
+    message: Human-readable description going beyond code and type
+    field_errors: Conditional map of field name -> list of messages (ValidationError)
+    non_field_errors: Conditional list of messages not tied to a specific field
+    conflict: Conditional object with location (path) and resource (representation), 409 only
+  example: |
+    {
+      "error": {
+        "code": 400,
+        "type": "ValidationError",
+        "message": "There were one or more validation errors with the provided data.",
+        "field_errors": {
+          "access_token": ["`access_token` cannot be None."]
+        }
+      }
+    }
+problems:
+- status: 400
+  type: ValidationError
+  title: There were one or more validation errors with the provided data.
+  extensions: [field_errors, non_field_errors]
+  remediation: >-
+    Inspect field_errors for per-field messages and non_field_errors for request-level messages, fix
+    the payload, and resubmit.
+  likely_operations:
+  - openapi/bungalow-openapi-original.yml#/listings/showings/
+  - openapi/bungalow-openapi-original.yml#/applications/source/
+- status: 400
+  type: ParseError
+  title: Malformed request.
+  remediation: The body could not be parsed. Check JSON syntax and the Content-Type header.
+- status: 401
+  type: AuthenticationFailed
+  title: Incorrect authentication credentials.
+  remediation: >-
+    The token may be malformed, invalid or expired. Obtain a new token via a supported authentication
+    method and retry. Applies to authenticated partner surfaces, not the public JSON API.
+- status: 401
+  type: NotAuthenticated
+  title: Authentication credentials were not provided.
+  remediation: A WWW-Authenticate header is returned indicating how the client should authenticate.
+- status: 401
+  type: InvalidToken
+  title: The refresh or access token provided has expired or is malformed.
+  remediation: >-
+    If this is an access token, exchange the refresh token for a new access token and retry. If it is
+    the refresh token, prompt the user to log in again.
+- status: 403
+  type: PermissionDenied
+  title: You do not have permission to perform this action.
+  remediation: >-
+    The request is authenticated but the user lacks permission for this action or data. Escalate
+    entitlement rather than retrying.
+- status: 404
+  type: NotFound
+  title: Not found.
+  remediation: Verify the id or slug. Applies to /markets/{id} and /listings/properties/{id_or_slug}.
+  likely_operations:
+  - openapi/bungalow-openapi-original.yml#/markets/{id}
+  - openapi/bungalow-openapi-original.yml#/listings/properties/{id_or_slug}
+- status: 405
+  type: MethodNotAllowed
+  title: 'Method "{method}" not allowed.'
+  remediation: >-
+    Check the Allow response header. Read endpoints advertise "Allow: GET, HEAD, OPTIONS"
+    (observed on /markets/ 2026-08-01).
+- status: 406
+  type: NotAcceptable
+  title: Could not satisfy the request Accept header.
+  remediation: Request application/json.
+- status: 409
+  type: Conflict
+  title: The submitted data conflicts with existing data.
+  extensions: [conflict.location, conflict.resource]
+  remediation: >-
+    The response carries conflict.location (the path of the conflicting resource) and
+    conflict.resource (its representation) — dereference it rather than re-POSTing. This is the
+    closest thing Bungalow offers to a de-duplication signal; there is no idempotency key.
+- status: 410
+  type: APIGoneError
+  title: The requested resource no longer exists.
+  remediation: >-
+    Documented example is a showing timeslot that has been taken: "This timeslot is no longer
+    available. Please select another time." Re-fetch the availability grid and pick a new slot.
+  likely_operations:
+  - openapi/bungalow-openapi-original.yml#/listings/showings/
+  - openapi/bungalow-openapi-original.yml#/listings/showings/availability/{id}/
+- status: 415
+  type: UnsupportedMediaType
+  title: 'Unsupported media type "{media_type}" in request.'
+  remediation: >-
+    Use one of application/json, application/x-www-form-urlencoded or multipart/form-data on the
+    write operations.
+- status: 429
+  type: Throttled
+  title: Request was throttled.
+  remediation: >-
+    A Retry-After header specifies how long to wait. Documented example message —
+    "Request was throttled. Expected available in 3 seconds." No numeric quota is published.
+  headers: [Retry-After]
+- status: 500
+  type: ServerError
+  title: Server Error.
+  remediation: >-
+    "Something broke in the API; we'll have been notified and will fix it, in the meantime, try
+    again."
+gaps:
+  spec_declares_error_responses: false
+  note: >-
+    All seven operations declare only a 200 response in the OpenAPI. The thirteen error classes above
+    are documented in prose only. Filing this back with the provider — adding 4xx/5xx responses and a
+    shared error component to the spec — is the single highest-leverage contract improvement
+    available to Bungalow.

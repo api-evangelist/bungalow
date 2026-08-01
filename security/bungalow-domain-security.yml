@@ -1,0 +1,22 @@
+generated: '2026-08-01'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: bungalow.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 26 05:05:35 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: fieldstone.bungalow.com
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Jan  1 23:59:59 2027 GMT
+  hsts: null
+domains:
+- domain: bungalow.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

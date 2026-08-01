@@ -1,0 +1,148 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Bungalow API
+  version: 1.0.0
+extends: openapi/bungalow-openapi-original.yml
+x-apievangelist:
+  generated: '2026-08-01'
+  method: generated
+  source: >-
+    Enhancements derived from the published API reference at
+    https://fieldstone.bungalow.com/api/v1/docs/ and from live probes of
+    https://fieldstone.bungalow.com/api/v1/ on 2026-08-01. The harvested original spec is never
+    mutated.
+  note: >-
+    The upstream spec has an empty info.version, no securitySchemes, no components.schemas, no
+    operation summaries, path-shaped operationIds, and declares only 200 responses. This overlay
+    records what we know to be true without editing the provider's document.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-harvested: '2026-08-01'
+    x-apievangelist-spec-source: https://fieldstone.bungalow.com/api/v1/open-api-schema/
+    x-apievangelist-docs: https://fieldstone.bungalow.com/api/v1/docs/
+    x-apievangelist-callable: true
+    x-apievangelist-callable-evidence: 'GET /markets/?limit=3 -> 200 application/json, anonymous, 2026-08-01'
+    x-apievangelist-version-note: >-
+      info.version is empty upstream. The only version signal is the /api/v1/ path segment; the docs
+      state semantic versioning within major versions.
+- target: $.servers
+  update:
+  - url: https://fieldstone.bungalow.com/api/v1/
+    description: Production. Anonymous, read-mostly public listings API. No sandbox is published.
+- target: $.info
+  update:
+    x-apievangelist-conventions: conventions/bungalow-conventions.yml
+    x-apievangelist-errors: errors/bungalow-problem-types.yml
+    x-apievangelist-data-model: data-model/bungalow-data-model.yml
+    x-apievangelist-authentication: authentication/bungalow-authentication.yml
+    x-apievangelist-webhooks: asyncapi/bungalow-webhooks.yml
+    x-apievangelist-error-envelope:
+      rfc9457: false
+      root_key: error
+      always_present: [code, type, message]
+      documented_types:
+      - ValidationError
+      - ParseError
+      - AuthenticationFailed
+      - NotAuthenticated
+      - InvalidToken
+      - PermissionDenied
+      - NotFound
+      - MethodNotAllowed
+      - NotAcceptable
+      - Conflict
+      - APIGoneError
+      - UnsupportedMediaType
+      - Throttled
+      - ServerError
+      note: >-
+        Documented in prose in the API reference but absent from every operation's responses object.
+    x-apievangelist-pagination:
+      style: limit-offset
+      limit_default: 20
+      limit_max: 100
+      offset_default: 0
+      response_fields: [results, count, next, previous]
+    x-apievangelist-rate-limiting:
+      signal: 429 Throttled with Retry-After
+      published_quota: null
+    x-agentic-access-summary:
+      read_operations: 5
+      write_operations: 2
+      idempotency: none
+      note: >-
+        Both write operations create real-world commitments (an appointment with a showing agent; a
+        named person's lease application) and carry no idempotency key. Treat as human-in-the-loop.
+- target: $.paths['/markets/'].get
+  update:
+    summary: List active markets
+    x-apievangelist-agent-note: >-
+      Mandatory entry point. /listings/properties/ requires market__slug, which is only obtainable
+      here. 23 markets observed 2026-08-01.
+    x-apievangelist-observed:
+      count: 23
+      cache_control: max-age=1800
+      allow: GET, HEAD, OPTIONS
+      id_wire_type: >-
+        Declared integer, returned as a decimal STRING (e.g. "715194178910805703"). Clients must not
+        parse as a 32-bit int.
+- target: $.paths['/markets/{id}'].get
+  update:
+    summary: Get a market with demand metrics
+- target: $.paths['/listings/properties/'].get
+  update:
+    summary: List marketable properties in a market
+    x-apievangelist-agent-note: >-
+      Branch on property_marketing_type — group_living uses full_property_price, co_living uses the
+      room_prices array. Co-living addresses and lat/long are deliberately obfuscated by the
+      provider.
+    x-apievangelist-polling:
+      refresh_interval: PT10M
+      max_staleness_recommended: PT24H
+    x-apievangelist-syndication-rule: >-
+      Bungalow requests that third-party listings sites only post a listing when the earliest
+      availability date is less than 30 days out.
+- target: $.paths['/listings/properties/{id_or_slug}'].get
+  update:
+    summary: Get a single property in full detail
+    x-apievangelist-agent-note: >-
+      Returns fields the list operation omits — description_html, matterport_url,
+      walkthrough_video_url, rooms, roommates, roommate_living_preferences, calendly_url,
+      showings_available.
+- target: $.paths['/listings/showings/availability/{id}/'].get
+  update:
+    summary: Get the showing availability grid for a property
+    x-apievangelist-agent-note: >-
+      {id} is the PROPERTY id, not a showing id. Timeslots carry job_id — pass it to
+      POST /listings/showings/ to join an existing group showing job.
+- target: $.paths['/listings/showings/'].post
+  update:
+    summary: Book a property showing
+    x-apievangelist-agent-note: >-
+      Non-idempotent, real-world consequence. Re-fetch availability before retrying; a taken slot
+      returns 410 APIGoneError with "This timeslot is no longer available. Please select another
+      time."
+    x-agentic-access:
+      action-class: acting
+      consequence: write
+      human-in-the-loop: required
+      idempotent: false
+      audit: required
+      x-apievangelist-note: >-
+        Recommended governance contract generated by API Evangelist. Not a provider claim.
+- target: $.paths['/applications/source/'].post
+  update:
+    summary: Create an application source (lead)
+    x-apievangelist-agent-note: >-
+      Submits a named individual's PII into Bungalow's leasing funnel and returns a public
+      application URL. Requires explicit consent from the person named. Non-idempotent.
+    x-agentic-access:
+      action-class: acting
+      consequence: write
+      human-in-the-loop: required
+      idempotent: false
+      audit: required
+      pii: true
+      x-apievangelist-note: >-
+        Recommended governance contract generated by API Evangelist. Not a provider claim.

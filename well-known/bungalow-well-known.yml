@@ -1,0 +1,62 @@
+generated: '2026-08-01'
+method: probed
+source: live GET probes of /.well-known/* on every Bungalow host
+note: >-
+  bungalow.com is a single-page application whose catch-all route answers HTTP 200 with the marketing
+  HTML shell for any unmatched path, so the 200s recorded below for /.well-known/security.txt and
+  /security.txt are FALSE POSITIVES — the body is text/html (the "Bungalow | Best Room & Home Rentals
+  Experience" page), not an RFC 9116 document. No real well-known document was found on any host, so
+  no raw files were saved and no SecurityTxt pointer is wired.
+hosts:
+- host: bungalow.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/html
+    real_document: false
+    reason: SPA catch-all HTML shell
+  - path: /security.txt
+    status: 200
+    content_type: text/html
+    real_document: false
+    reason: SPA catch-all HTML shell
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: fieldstone.bungalow.com
+  note: API host; returns a bare "Not Found" body (no SPA catch-all), so these 404s are authoritative.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+summary:
+  documents_found: 0
+  security_txt: false
+  openid_configuration: false
+  oauth_authorization_server: false
+  api_catalog: false
+  agent_card: false

@@ -1,0 +1,63 @@
+generated: '2026-08-01'
+method: searched
+source: https://fieldstone.bungalow.com/api/v1/docs/
+docs: https://fieldstone.bungalow.com/api/v1/docs/#section/Getting-Started
+note: >-
+  The Bungalow OpenAPI declares no components.securitySchemes, so the mechanical derive produced
+  nothing. This profile is SEARCHED from the published API documentation and confirmed by live
+  anonymous calls: the public JSON API is unauthenticated. The docs' error reference does describe
+  bearer access/refresh tokens (AuthenticationFailed, NotAuthenticated, InvalidToken), which apply to
+  Bungalow's non-public/authenticated surfaces (the partner XML feeds and the resident/homeowner
+  product), not to the seven published listings operations.
+summary:
+  types: [none]
+  public_api_authentication: none
+  api_key_in: []
+  oauth2_flows: []
+  partner_surfaces_authenticated: true
+schemes: []
+surfaces:
+- name: Public JSON API
+  base_url: https://fieldstone.bungalow.com/api/v1/
+  authentication: none
+  evidence:
+    verified: '2026-08-01'
+    request: GET https://fieldstone.bungalow.com/api/v1/markets/?limit=3
+    http_status: 200
+    content_type: application/json
+    note: 200 returned with no Authorization header and no cookie.
+  operations:
+  - /markets/
+  - /markets/{id}
+  - /listings/properties/
+  - /listings/properties/{id_or_slug}
+  - /listings/showings/availability/{id}/
+  - /listings/showings/
+  - /applications/source/
+- name: Partner XML feeds (Hotpads / Facebook Catalog)
+  authentication: partner-provisioned
+  onboarding: email integrations@bungalow.com with intended use and desired format
+  note: >-
+    "Since they are authenticated, we can provide a broader range of fields than the public JSON API
+    does." Credential type is not published. MITS format is listed as possible future support.
+  formats: [hotpads, facebook-catalog]
+  source: https://fieldstone.bungalow.com/api/v1/docs/#section/Getting-Started
+- name: Lead-capture webhook (partner -> Bungalow)
+  authentication: partner-provisioned
+  onboarding: email integrations@bungalow.com to have a webhook configured for your platform
+  source: https://fieldstone.bungalow.com/api/v1/docs/#section/Getting-Started
+documented_auth_errors:
+- type: AuthenticationFailed
+  status: 401
+  message: Incorrect authentication credentials.
+- type: NotAuthenticated
+  status: 401
+  message: Authentication credentials were not provided.
+  note: A WWW-Authenticate header is returned indicating how to authenticate.
+- type: InvalidToken
+  status: 401
+  message: The refresh or access token provided has expired or is malformed.
+  note: Refresh-token rotation is documented — use the refresh token to mint a new access token.
+- type: PermissionDenied
+  status: 403
+  message: You do not have permission to perform this action.

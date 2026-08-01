@@ -1,0 +1,149 @@
+generated: '2026-08-01'
+method: searched
+source: https://fieldstone.bungalow.com/api/v1/docs/
+derived_from: openapi/bungalow-openapi-original.yml
+authentication:
+  style: none
+  detail: Public JSON API is anonymous. See authentication/bungalow-authentication.yml.
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    Bungalow documents no idempotency key, no request de-duplication window, and no safe-retry
+    contract. Both write operations (POST /listings/showings/ and POST /applications/source/) are
+    non-idempotent — a repeated call creates a second showing or a second application source. The
+    only related signal is a documented 409 Conflict envelope carrying conflict.location and
+    conflict.resource, which lets a client detect (but not prevent) a duplicate after the fact.
+    No Idempotency pointer is wired in apis.yml because the contract does not exist.
+pagination:
+  style: limit-offset
+  scope: all resource listing endpoints
+  request_params:
+  - name: limit
+    in: query
+    type: integer
+    default: 20
+    max: 100
+    description: Return at most this many results.
+  - name: offset
+    in: query
+    type: integer
+    default: 0
+    description: Return results after this point.
+  response_fields:
+    results: The result set (array)
+    count: Total number of results (integer)
+    next: Absolute URL for the next result set (nullable string)
+    previous: Absolute URL for the previous result set (nullable string)
+  verified:
+    date: '2026-08-01'
+    request: GET https://fieldstone.bungalow.com/api/v1/markets/?limit=3
+    observed: 'count: 23, next: https://fieldstone.bungalow.com/api/v1/markets/?limit=3&offset=3, previous: null'
+filtering:
+  style: query-parameter
+  note: >-
+    GET /listings/properties/ requires market__slug and accepts 17 further filters. Django-style
+    double-underscore relation traversal (market__slug, neighborhood__slug) is the convention.
+  parameters:
+  - market__slug          # REQUIRED — e.g. bay-area, seattle, los-angeles
+  - neighborhood__slug
+  - marketing_type        # enum: group_living | co_living
+  - available_room_count
+  - total_room_count
+  - earliest_marketable_room
+  - earliest_available_date_or_today
+  - is_coming_soon
+  - is_featured
+  - master_bedroom
+  - private_bathroom
+  - dryer
+  - washer
+  - backyard
+  - pool
+  - pet_friendly
+  - min_price
+  - max_price
+field_expansion:
+  supported: false
+  note: >-
+    No sparse-fieldset or expand parameter. Instead the API uses a two-tier representation: the list
+    endpoint returns a lean property object and GET /listings/properties/{id_or_slug} "returns a
+    richer level of information than the list endpoint."
+metadata:
+  supported: partial
+  note: >-
+    POST /applications/source/ accepts a free-form `extra` field; POST /listings/showings/ accepts
+    utm_source, utm_campaign, utm_medium, utm_term, utm_content and gclid attribution fields.
+request_tracing:
+  request_id_header: null
+  note: No correlation/request-id header is documented or observed in responses.
+versioning:
+  scheme: uri-path
+  current: v1
+  pattern: /api/v1/path/to/specific/endpoint
+  policy: semver
+  statement: >-
+    "We use semantic versioning so within major versions you do not have to worry about changes
+    breaking backward compatibility."
+  source: https://fieldstone.bungalow.com/api/v1/docs/#section/Versioning
+error_envelope:
+  format: proprietary
+  rfc9457: false
+  content_type: application/json
+  shape: |
+    {
+      "error": {
+        "code": <status_code>,
+        "type": <string>,
+        "message": <string>,
+        "field_errors": { "<param_name>": [<string>, ...] },     // conditional
+        "non_field_errors": [<string>, ...],                     // conditional
+        "conflict": { "location": <path>, "resource": <object> } // conditional (409 only)
+      }
+    }
+  always_present: [code, type, message]
+  catalog: errors/bungalow-problem-types.yml
+rate_limiting:
+  supported: true
+  signal: 429 with a Retry-After header
+  error_type: Throttled
+  published_limits: null
+  note: >-
+    "In the case of a throttled request, a Retry-After header will specify how long the user should
+    wait before trying the API call again." No numeric quota, no X-RateLimit-* headers, and no
+    RateLimit (RFC 9331/draft) headers are published, so no rate-limits/ artifact with a limit_count
+    is emitted.
+caching:
+  supported: true
+  observed_headers:
+    cache-control: max-age=1800
+    expires: present
+    vary: Cookie, Origin, Accept-Encoding
+  note: >-
+    Observed on GET /markets/ 2026-08-01. Documentation separately advises that listing results are
+    refreshed roughly every 10 minutes and that polling should match that cadence, and recommends
+    pulling new results at least every 24 hours because pricing changes dynamically.
+polling:
+  refresh_interval: ~10 minutes
+  max_staleness_recommended: 24 hours
+  source: https://fieldstone.bungalow.com/api/v1/docs/#tag/Listings
+content_negotiation:
+  response: application/json
+  request_bodies: [application/json, application/x-www-form-urlencoded, multipart/form-data]
+  note: Both write operations accept all three request media types.
+data_handling:
+  privacy: >-
+    Co-living addresses are obfuscated and latitude/longitude fidelity is reduced for privacy.
+    Full street_address is provided only for whole-home (group_living) rentals.
+  syndication_rule: >-
+    "Bungalow requests that third-party listings sites only post a listing if there is less than
+    30 days until the earliest availability date."
+  pricing_rule: >-
+    Use property_marketing_type to branch: group_living -> full_property_price; co_living ->
+    the room_prices array.
+cross_links:
+  errors: errors/bungalow-problem-types.yml
+  lifecycle: lifecycle/bungalow-lifecycle.yml
+  authentication: authentication/bungalow-authentication.yml
+  webhooks: asyncapi/bungalow-webhooks.yml
+  data_model: data-model/bungalow-data-model.yml
