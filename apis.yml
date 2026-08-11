@@ -80,6 +80,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/bungalow-mcp.yml
 - type: Website
   url: https://bungalow.com/
 - type: DeveloperPortal
