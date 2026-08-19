@@ -8,21 +8,19 @@ search_result:
   - Bungalow API reference (https://fieldstone.bungalow.com/api/v1/docs/) — no MCP mention
   - bungalow.com sitemap.xml (2.2 MB, scanned 2026-08-01) — no /mcp route
   - 'DNS: mcp.bungalow.com — NXDOMAIN'
-  - 'npm registry search "bungalow" — no first-party MCP server package'
+  - npm registry search "bungalow" — no first-party MCP server package
   - 'GitHub: no bungalow / BungalowLiving org with public repos'
-  note: >-
-    Bungalow operates no hosted or published MCP server. The tool list below is a CANDIDATE derived
-    one-for-one from the seven published OpenAPI operations. It is a design proposal, not a claim
-    that Bungalow serves it.
+  note: Bungalow operates no hosted or published MCP server. The tool list below is a CANDIDATE derived
+    one-for-one from the seven published OpenAPI operations. It is a design proposal, not a claim that
+    Bungalow serves it.
 server:
   name: bungalow
   transport: http
   url: null
   authentication: none
-  note: >-
-    A candidate server needs no credential surface — all seven backing operations are anonymous.
-    This makes Bungalow an unusually clean MCP candidate: a read-mostly, keyless, geographically
-    scoped listings API.
+  note: 'A candidate server needs no credential surface — all seven backing operations are anonymous.
+    This makes Bungalow an unusually clean MCP candidate: a read-mostly, keyless, geographically scoped
+    listings API.'
 tools:
 - name: list_markets
   description: List all active Bungalow markets (US metros) with geo bounds, timezone and rent premiums.
@@ -39,15 +37,13 @@ tools:
   input_schema_source: operation parameters (id)
   read_only: true
 - name: search_listings
-  description: >-
-    List marketable properties in a market, filterable by neighborhood, marketing type
-    (co_living/group_living), price range, room counts, availability date and amenities.
+  description: List marketable properties in a market, filterable by neighborhood, marketing type (co_living/group_living),
+    price range, room counts, availability date and amenities.
   source_operation: openapi/bungalow-openapi-original.yml#/listings/properties/
   method: GET
   path: /listings/properties/
-  input_schema_source: >-
-    operation parameters — 19 total; market__slug is REQUIRED, so an agent must call list_markets
-    first
+  input_schema_source: operation parameters — 19 total; market__slug is REQUIRED, so an agent must call
+    list_markets first
   read_only: true
 - name: get_listing
   description: Get the rich detail record for one property by id or slug.
@@ -70,9 +66,8 @@ tools:
   path: /listings/showings/
   input_schema_source: 'requestBody — required: property, start_time, end_time'
   read_only: false
-  consequence: >-
-    Creates a real-world appointment with a Bungalow showing agent and triggers messaging to the
-    attendee. NOT idempotent — a repeat call books a second showing. Requires human confirmation.
+  consequence: Creates a real-world appointment with a Bungalow showing agent and triggers messaging to
+    the attendee. NOT idempotent — a repeat call books a second showing. Requires human confirmation.
 - name: submit_application_source
   description: Create an application source (lead) and receive a public application URL.
   source_operation: openapi/bungalow-openapi-original.yml#/applications/source/
@@ -80,23 +75,23 @@ tools:
   path: /applications/source/
   input_schema_source: 'requestBody — required: first_name, last_name, email, market'
   read_only: false
-  consequence: >-
-    Submits a named individual's personal data into Bungalow's leasing funnel. NOT idempotent.
+  consequence: Submits a named individual's personal data into Bungalow's leasing funnel. NOT idempotent.
     Requires human confirmation and explicit consent from the person named.
 agent_notes:
-  entry_point: >-
-    list_markets is the mandatory first call — search_listings requires market__slug and there is no
-    global property enumeration.
-  pricing_branch: >-
-    Branch on property_marketing_type: group_living -> full_property_price; co_living ->
-    room_prices.
+  entry_point: list_markets is the mandatory first call — search_listings requires market__slug and there
+    is no global property enumeration.
+  pricing_branch: 'Branch on property_marketing_type: group_living -> full_property_price; co_living ->
+    room_prices.'
   freshness: Listing data refreshes about every 10 minutes; do not cache longer than 24 hours.
-  privacy: >-
-    Co-living street addresses and lat/long are deliberately obfuscated by the provider. Do not
+  privacy: Co-living street addresses and lat/long are deliberately obfuscated by the provider. Do not
     attempt to re-identify them.
-  syndication: >-
-    Bungalow asks that third-party surfaces only post a listing when the earliest availability date
-    is less than 30 days out.
-  no_idempotency: >-
-    Neither write tool has an idempotency key. On a network timeout, re-read
-    (get_showing_availability) before retrying rather than re-POSTing.
+  syndication: Bungalow asks that third-party surfaces only post a listing when the earliest availability
+    date is less than 30 days out.
+  no_idempotency: Neither write tool has an idempotency key. On a network timeout, re-read (get_showing_availability)
+    before retrying rather than re-POSTing.
+deployment:
+  mode: none
+  verified: derived
+  tools: 7
+  checked: '2026-08-12'
+  source: catalog MCP census
