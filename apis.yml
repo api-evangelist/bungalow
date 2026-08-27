@@ -45,46 +45,131 @@ tags_raw:
 - proptech
 - marketplace
 apis:
-- name: Bungalow API
-  description: >-
-    Anonymous, read-mostly public REST API for syndicating Bungalow's residential rental inventory.
-    Covers markets (23 active US metros with geo bounds, timezone and rent premiums), marketable
-    property listings filtered by market slug, neighborhood, amenities and price, single-property
-    detail by id or slug, showing-availability grids, showing creation, and application-source
-    submission. JSON over HTTPS with limit/offset pagination, a structured error envelope, and URI
-    path versioning (/api/v1/). Authenticated Hotpads and Facebook Catalog XML feeds are available to
-    approved partners via integrations@bungalow.com.
+- aid: bungalow:bungalow-applications-api
+  name: Bungalow Applications API
+  description: The Applications API from Bungalow — 1 operation(s) for applications.
   humanURL: https://fieldstone.bungalow.com/api/v1/docs/
   baseURL: https://fieldstone.bungalow.com/api/v1/
   tags:
-  - Real-Estate
-  - Rental Listings
-  - Listings Syndication
-  - Property Management
-  - Co-Living
-  - Single-Family Rental
-  - Housing
-  - PropTech
-  tags_raw:
-  - real-estate
-  - rental-listings
-  - listings-syndication
-  - property-management
-  - co-living
-  - single-family-rental
-  - housing
-  - proptech
+  - Applications
   properties:
+  - type: OpenAPI
+    url: openapi/bungalow-applications-api-openapi.yml
   - type: Documentation
     url: https://fieldstone.bungalow.com/api/v1/docs/
   - type: APIReference
     url: https://fieldstone.bungalow.com/api/v1/docs/
   - type: GettingStarted
     url: https://fieldstone.bungalow.com/api/v1/docs/#section/Getting-Started
+  - type: Authentication
+    url: authentication/bungalow-authentication.yml
+  - type: Conventions
+    url: conventions/bungalow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/bungalow-problem-types.yml
+  - type: DataModel
+    url: data-model/bungalow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/bungalow-webhooks.yml
+- aid: bungalow:bungalow-listings-api
+  name: Bungalow Listings API
+  description: >-
+    Listings endpoints allow you to get all listings in a market or a singular property.
+
+
+    Rooms within properties can become marketable before the room is vacant, generally if
+
+    there is a known move out occurring in the future.
+
+
+    Results are updated approximately every 10 minutes so any polling done on these endpoints
+
+    should aim to match that timeframe where possible. Since pricing can change dynamically
+
+    we recommend not waiting longer than 24 hrs to pull new results.
+
+
+    In order to discern between entire house "Group Home" listings and individual room
+
+    "Coliving Home" listings, please use the `property_marketing_type` value (co_living
+
+    or group_living). If the value is `group_living`, use the `full_property_price` field
+
+    for pricing, if the value is `co_living`, use the values in the `room_prices` array.
+
+
+    Bungalow requests that third-party listings sites only post a listing if there is less
+
+    than 30 days until the earliest availability date.
+  humanURL: https://fieldstone.bungalow.com/api/v1/docs/
+  baseURL: https://fieldstone.bungalow.com/api/v1/
+  tags:
+  - Listings
+  properties:
   - type: OpenAPI
-    url: openapi/bungalow-openapi-original.yml
-  - type: Overlay
-    url: overlays/bungalow-openapi-original-overlay.yaml
+    url: openapi/bungalow-listings-api-openapi.yml
+  - type: Documentation
+    url: https://fieldstone.bungalow.com/api/v1/docs/
+  - type: APIReference
+    url: https://fieldstone.bungalow.com/api/v1/docs/
+  - type: GettingStarted
+    url: https://fieldstone.bungalow.com/api/v1/docs/#section/Getting-Started
+  - type: Authentication
+    url: authentication/bungalow-authentication.yml
+  - type: Conventions
+    url: conventions/bungalow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/bungalow-problem-types.yml
+  - type: DataModel
+    url: data-model/bungalow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/bungalow-webhooks.yml
+- aid: bungalow:bungalow-markets-api
+  name: Bungalow Markets API
+  description: >-
+    A market is a generalized geographical area that often represents a city (e.g. Seattle, Boston), but
+    can also represent a broader metropolitan area (e.g. Bay Area).
+  humanURL: https://fieldstone.bungalow.com/api/v1/docs/
+  baseURL: https://fieldstone.bungalow.com/api/v1/
+  tags:
+  - Markets
+  properties:
+  - type: OpenAPI
+    url: openapi/bungalow-markets-api-openapi.yml
+  - type: Documentation
+    url: https://fieldstone.bungalow.com/api/v1/docs/
+  - type: APIReference
+    url: https://fieldstone.bungalow.com/api/v1/docs/
+  - type: GettingStarted
+    url: https://fieldstone.bungalow.com/api/v1/docs/#section/Getting-Started
+  - type: Authentication
+    url: authentication/bungalow-authentication.yml
+  - type: Conventions
+    url: conventions/bungalow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/bungalow-problem-types.yml
+  - type: DataModel
+    url: data-model/bungalow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/bungalow-webhooks.yml
+- aid: bungalow:bungalow-showings-api
+  name: Bungalow Showings API
+  description: >-
+    These two endpoints will give you everything you need to get booking availability, as well as create
+    a showing at a given property.
+  humanURL: https://fieldstone.bungalow.com/api/v1/docs/
+  baseURL: https://fieldstone.bungalow.com/api/v1/
+  tags:
+  - Showings
+  properties:
+  - type: OpenAPI
+    url: openapi/bungalow-showings-api-openapi.yml
+  - type: Documentation
+    url: https://fieldstone.bungalow.com/api/v1/docs/
+  - type: APIReference
+    url: https://fieldstone.bungalow.com/api/v1/docs/
+  - type: GettingStarted
+    url: https://fieldstone.bungalow.com/api/v1/docs/#section/Getting-Started
   - type: Authentication
     url: authentication/bungalow-authentication.yml
   - type: Conventions
