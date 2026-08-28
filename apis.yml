@@ -13,6 +13,18 @@ description: >-
   showing, and submit an application source. Authenticated Hotpads and Facebook Catalog XML feeds are
   offered to approved integration partners as a richer alternative, and partners are asked to post
   lead-capture webhooks back to Bungalow. Active in roughly 23 markets across the United States.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://assets.bungalow.com/home-page/header/header-hero-min.png?h=630&w=1200&auto=format
 url: https://raw.githubusercontent.com/api-evangelist/bungalow/refs/heads/main/apis.yml
 x-type: company
