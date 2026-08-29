@@ -198,6 +198,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/bungalow-capability-edges.yml
+  name: Bungalow Business Capability Map
 - type: MCPServer
   url: mcp/bungalow-mcp.yml
 - type: Website
