@@ -34,15 +34,15 @@ created: '2026-08-01'
 modified: '2026-08-01'
 tags:
 - Company
-- Real-Estate
-- Residential Real Estate
-- Rental Listings
-- Property Management
-- Co-Living
-- Single-Family Rental
-- Listings Syndication
-- Housing
-- PropTech
+- real-estate
+- residential-real-estate
+- rental-listings
+- property-management
+- co-living
+- single-family-rental
+- listings-syndication
+- housing
+- proptech
 - Marketplace
 tags_raw:
 - Company
@@ -63,6 +63,8 @@ apis:
   humanURL: https://fieldstone.bungalow.com/api/v1/docs/
   baseURL: https://fieldstone.bungalow.com/api/v1/
   tags:
+  - Application
+  tags_raw:
   - Applications
   properties:
   - type: OpenAPI
