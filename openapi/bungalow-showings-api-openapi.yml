@@ -1,0 +1,467 @@
+openapi: 3.2.0
+info:
+  title: Bungalow Showings API
+  version: ''
+  description: "# Getting Started\n\nIf you are looking to integrate Bungalow's property listings, we provide a number of helpful endpoints. For accessing our listings you have two primary options:\n\n## JSON API\n\nThis API is, for the most part, based on [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) principles. It uses HTTP response codes to indicate errors and HTTP verbs to describe requests. JSON is returned by all API responses, including errors.\n\nIn the endpoints section below, the `markets` and `listings` topics will provide you with a quick path to integration. Getting our listings will typically only require three endpoints: `/markets/`, `/listings/properties/` and `/listings/properties/{id_or_slug}`. Details on these individual calls can be found in the endpoints section below.\n\n## XML Feeds\n\nAs an alternative to the JSON API, we currently offer feeds in two formats: [Hotpads](https://filenet.hotpads.com/+guides/RentalListingsFeedGuide.pdf) and [Facebook Catalog](https://developers.facebook.com/docs/marketing-api/real-estate-ads/#feed-xml-example). [MITS](https://www.retall.org/wp-content/uploads/2019/04/Property-Marketing-ILS-4.1-Supplemental.html) may be supported in the future. The main advantage to using our XML feeds is that since they are authenticated, we can provide a broader range of fields than the public JSON API does. If you would like access to a feed for your organization, please send us a request to [integrations@bungalow.com](mailto:integrations@bungalow.com) including details about how you would like to use the feed and which format you would like to use.\n\nExample feed (Hotpads format):\n\n```xml\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<hotPadsItems version=\"2.1\">\n    <Company id=\"bungalow\">\n        <name>Bungalow</name>\n        <website>https://bungalow.com</website>\n        <city>San Francisco</city>\n        <state>CA</state>\n        <CompanyLogo source=\"https://assets.bungalow.com/logos/bungalow_symbol_dark.png\"></CompanyLogo>\n    </Company>\n    <Listing companyId=\"bungalow\" id=\"1\" propertyType=\"HOUSE\" type=\"ROOM\">\n        <description>PRICE DROP ON SHORT TERM LEASES\n \nWe lowered rent on all short term leases and added more flexibility on lease start dates -- Lock in a lease now for a move-in date up to 60 days out.  \n \nNEW VIDEO CHAT TOURS\n \nConnect with a Bungalow representative from your smartphone, tablet, or computer. Take a video tour of the home and get all your questions answered.\n \nMOVE-IN WITH A REDUCED SECURITY DEPOSIT\n \nThe Space...\n </description>\n        <virtualTourUrl>https://my.matterport.com/show/?m=mwiKGSegeLp&amp;utm_source=4</virtualTourUrl>\n        <name>Private Room in Contemporary Northwest District Home Near Union Station</name>\n        <website>https://bungalow.com/listings/portland/special-seasonal-rate-steps-from-the</website>\n        <price>995</price>\n        <city>Portland</city>\n        <state>OR</state>\n        <zip>97209</zip>\n        <country>US</country>\n        <latitude>45.52...</latitude>\n        <longitude>-122.68...</longitude>\n        <street hide=\"true\">1234 Some Street</street>\n        <contactEmail>portlandrentals@bungalow.com</contactEmail>\n        <contactMethodPreference>Email</contactMethodPreference>\n        <lastUpdated>2020-06-04T19:46:37.268526+00:00</lastUpdated>\n        <ListingTag type=\"DOGS_ALLOWED\">\n            <tag>False</tag>\n        </ListingTag>\n        <ListingTag type=\"LARGE_DOGS_ALLOWED\">\n            <tag>False</tag>\n        </ListingTag>\n        <ListingTag type=\"CATS_ALLOWED\">\n            <tag>False</tag>\n        </ListingTag>\n        <ListingTag type=\"PROPERTY_AMENITY\">\n            <tag>wifi</tag>\n        </ListingTag>\n        <ListingTag type=\"COOLING_SYSTEM\">\n            <tag>other</tag>\n        </ListingTag>\n        <ListingTag type=\"HEATING_SYSTEM\">\n            <tag>other</tag>\n        </ListingTag>\n        <numBedrooms>1</numBedrooms>\n        <numFullBaths>1</numFullBaths>\n        <numHalfBaths>0</numHalfBaths>\n        <dateAvailable>2020-04-01</dateAvailable>\n        <ListingTag type=\"AMENITY\">\n            <tag>Washer</tag>\n        </ListingTag>\n        <ListingTag type=\"AMENITY\">\n            <tag>Dishwasher</tag>\n        </ListingTag>\n        <ListingTag type=\"LAUNDRY\">\n            <tag>SHARED</tag>\n        </ListingTag>\n        <ListingTag type=\"PARKING_SPACES\">\n            <tag>0</tag>\n        </ListingTag>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/e4833c1ef4412485631c1bf3358eac6f409e55b4-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/70185d5e1cd35f15e5200899efb1536af7da347d-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/e65350af322a19b12a677f718725682214bf54ba-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/4476410f42949468b3cdf7cb070b2725a08fec5b-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/1519446e454be507177b97ca780e068517de1854-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/a819d06058220488909c67afed361e0fb8488462-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/245983ffc0f90534af1fc9a8bfc4d182ff5b1078-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/7aa88ca242d2a4ab26696628701a7f207e1e4fc9-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/541fd6af62101e212a1207640e7e5f7975cb7eb3-lg.jpg\"></ListingPhoto>\n        <terms>3-18 months</terms>\n        <Model id=\"4\" type=\"unit\">\n            <name>Master - 1</name>\n            <lowPrice>995</lowPrice>\n            <highPrice>995</highPrice>\n            <dateAvailable>2020-04-01</dateAvailable>\n            <squareFeet>99</squareFeet>\n            <ModelTag type=\"APPLICATION_FEE\">\n                <tag>0</tag>\n            </ModelTag>\n        </Model>\n        ...\n    </Listing>\n    ...\n</hotPadsItems>\n```\n\n## Lead Capture\n\nWhen a lead shows interest in one of our properties on your platform, in order to have the best possible lead experience, we ask that you **send us a webhook** with the lead data included. In order to have a webook configured for your platform, please send us a request to [integrations@bungalow.com](mailto:integrations@bungalow.com). Our webhook endpoint is flexible for data format and can support JSON or url-form-encoded formatting.\n\nExample webhook payload:\n\n```json\n{\n  \"property_id\": \"49801887334039362\",\n  \"property_name\": \"spacious-san-mateo-renovation-near\",\n  \"first_name\": \"Sterling\",\n  \"last_name\": \"Archer\",\n  \"email\": \"sarcher@example.com\",\n  \"phone\": \"5551234567\",\n  \"bio\": \"I’m not saying I invented the turtleneck, but I was the first person to realise its potential as a tactical garment. The tactical turtleneck! The… tactleneck.\",\n  \"max_budget\": 1500,\n  \"desired_move_in_date\": \"06-01-2020\",\n  \"student\": false,\n  \"work\": \"CIA\",\n  \"school\": \"Georgetown University\",\n  \"hobbies\": [\n    \"travel\",\n    \"sports\",\n    \"foodie\"\n  ]\n}\n```\n\n ### Required fields for Lead Capture:\n\nCasing is flexible, but `snake_case` is recommended.\n\n * `property_id`: the id of the property/listing object\n * `name`, or `first_name` and `last_name`: name of lead, can be a full name or separated first/last\n * `email`: email of lead\n\n# Errors\n\nError responses will always include a body of JSON data as below.\n\n    {\n        \"error\": {\n            \"code\": <status_code>,\n            \"type\": <unicode>,\n            \"message\": <unicode>,\n        *   \"field_errors\": {\n                \"<param_name>\": [<unicode>, ... ],\n                ...\n            },\n        *   \"non_field_errors\": [<unicode>, ... ],\n        *   \"conflict\": {\n                \"location\": <path>,\n                \"resource\": <representation>\n            }\n        }\n    }\n\n* starred attributes are conditionally present\n\n* `code` - the HTTP response code for the response - a little redundant, but makes the API much more browseable.\n* `type` - short string indicating the nature of the error. Possible values are listed in the [Types](#section/Errors/Types) section, and include things like “ValidationError”, “Throttled”, and “ServerError”.\n* `message` - textual description of the error which should go beyond the `code` and `type` in terms of informing the client what is going on exactly.\n* `field_errors` - dictionary of fields to error messages, to be returned when some client-provided data fails validation. Typically will be seen alongside a `ValidationError`.\n* `non_field_errors` - list of error messages for the client-provided data that might not pertain to specific fields.\n* `conflict.location` and `conflict.resource` will only be present for a `ConflictError`.\n\n## Types\n\n### ValidationError\n\n`400` - There were one or more validation errors with the provided data.\n\nAll our error types (as seen below) will contain at minimum the `code`, `type` and `message` components. However, the `ValidationError` will include further information to let you know what was wrong with your data submission.\n\n#### Field Errors\n\nIf the `field_errors` key is present in the error response, it will map a list of errors to specific fields, clearly indicating what data was problematic.\n\n    {\n        \"error\": {\n            \"message\": \"There were one or more validation errors with the provided data.\",\n            \"code\": 400,\n            \"type\": \"ValidationError\",\n            \"field_errors\": {\n                \"access_token\": [\n                    \"`access_token` cannot be None.\"\n                ]\n            }\n        }\n    }\n\n#### Non Field Errors\n\nYou may also receive further information in a form that is not specific to any particular field. This will be present in a list keyed on `non_field_errors` as part of a `ValidationError`.\n\n    {\n        \"error\": {\n            \"message\": \"There were one or more validation errors with the provided data.\",\n            \"code\": 400,\n            \"type\": \"ValidationError\",\n            \"non_field_errors\": [\n                \"That account has been closed.\"\n            ]\n        }\n    }\n\n\n### ParseError\n\n`400` - Malformed request.\n\n### AuthenticationFailed\n`401` - Incorrect authentication credentials.\n\nThe token you are submitting may be malformed, invalid or expired. Use one of the supported authentication methods to get a new token and try again.\n\n### NotAuthenticated\n\n`401` - Authentication credentials were not provided.\n\nA 'WWW-Authenticate' header will be present in the response, indicating to the client how they can go about authenticating.\n\n### InvalidToken\n\n`401` - The refresh or access token provided has expired or is malformed.\n\nIf you receive this message for an access token, you should use your refresh token to get a new access token and try the request again.\n\nIf you receive it for a refresh token, you should prompt the user to log in to get a new refresh token.\n\n### PermissionDenied\n\n`403` - You do not have permission to perform this action.\n\nYour request is authenticated, but the related user does not have permission to\nperform the action you're trying perform, or to access the data you're trying to\naccess.\n\n### NotFound\n\n`404` - Not found.\n\n### MethodNotAllowed\n\n`405` - Method \"{method}\" not allowed.\n\n### NotAcceptable\n\n`406` - Could not satisfy the request Accept header.\n\n### Conflict\n\n`409` - The submitted data conflicts with existing data.\n\nIn the case of a `Conflict` the additional attributes `conflict.location` and `conflict.resource` will be in the response body, providing detail of the conflicting resource.\n\nFor example:\n\n    {\n        \"error\": {\n            \"code\": 409,\n            \"type\": \"Conflict\",\n            \"message\": \"You've already added that number!\",\n            \"conflict\": {\n                \"location\": \"/api/v1/phones/numbers/1\",\n                \"resource\": {\n                    \"id\": 1,\n                    \"number\": \"+17788486723\",\n                    \"primary\": null,\n                    \"verified\": false,\n                    \"created\": \"2018-09-25T21:45:07.165829Z\"\n                }\n            }\n        }\n    }\n\n### Gone ###\n`410` - The requested resource no longer exists.\n\nWhen a resource was available, but has been taken or no longer exists.\n\nFor example:\n\n    {\n        \"error\": {\n            \"code\": 410,\n            \"type\": \"APIGoneError\",\n            \"message\": \"The requested resource no longer exists.\",\n            \"non_field_errors\": [\n                \"This timeslot is no longer available. Please select another time.\"\n            ]\n        }\n    }\n\n### UnsupportedMediaType\n\n`415` - Unsupported media type \"{media_type}\" in request.\n\n### Throttled\n\n`429` - Request was throttled.\n\nFor example:\n\n    {\n        \"error\": {\n            \"message\": \"Request was throttled. Expected available in 3 seconds.\",\n            \"code\": 429,\n            \"type\": \"Throttled\"\n        }\n    }\n\nIn the case of a throttled request, a `Retry-After` header will specify how long the user should wait before trying the API call again.\n\n\n### ServerError\n\n`500` - Server Error.\n\nSomething broke in the API; we'll have been notified and will fix it, in the meantime, try again.\n\n# Pagination\n\nAcross all resource listing endpoints a standardised approach to pagination is used. A typical paginated response appears below.\n\n    {\n        \"results\": [\n            <type>, ..\n        ],\n        \"count\": <int>,\n        \"next\": <url>,\n        \"previous\": <url>\n    }\n\n* `results` - the result set\n* `count` - the total number results\n* `next` - URL for the next result set\n* `previous` - URL for the previous result set\n\n### Parameters ###\n\nResults can be iteratively fetched using `limit` and `offset` parameters.\n\n* `limit` - return at most this many results. Default: 20, max: 100\n* `offset` - return results after this point. Default: 0\n\n# Versioning\n\nYou can control what version of the API you access by manipulating the path. For example, the following would access version 1.X of the API:\n\n    /api/v1/path/to/specific/endpoint\n\nWe use [semantic versioning](https://semver.org/#semantic-versioning-200) so within major versions you do not have to worry about changes breaking backward compatibility.\n"
+  x-logo:
+    url: https://assets.bungalow.com/logos/bungalow_wordmark_dark.png
+    altText: Bungalow wordmark
+servers:
+- url: https://fieldstone.bungalow.com/api/v1/
+tags:
+- name: Showings
+  description: These two endpoints will give you everything you need to get booking availability, as well as create a showing at a given property.
+  x-order: 3
+paths:
+  /listings/showings/availability/{id}/:
+    get:
+      operationId: /listings/showings/availability/{id}/
+      description: Retrieve the Showing availability grid based on Property
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this property.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: is_virtual
+        required: false
+        in: query
+        description: If set to true, gets timeslots for virtual showings. This changes the delta for the first slot to 40 minutes.
+        schema:
+          type: string
+      - name: is_soon
+        required: false
+        in: query
+        description: If set to true, displays all timeslots. If set to false, displays less popular timeslots (4PM and later) plus 3 days from today. Auto defaults to true if not set.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type:
+                    - string
+                    - 'null'
+                  previous:
+                    type:
+                    - string
+                    - 'null'
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        timezone_name:
+                          type: string
+                        timezone_utc_offset:
+                          type: integer
+                        availability_periods:
+                          type: array
+                          items:
+                            properties:
+                              day_start:
+                                type: string
+                                readOnly: true
+                              timeslots:
+                                type: array
+                                items:
+                                  properties:
+                                    start_time:
+                                      type: string
+                                      format: date-time
+                                    end_time:
+                                      type: string
+                                      format: date-time
+                                    job_id:
+                                      type:
+                                      - string
+                                      - 'null'
+                                    resource_ids:
+                                      type: array
+                                      items: {}
+                                  required:
+                                  - start_time
+                                  - end_time
+                                  - job_id
+                                  - resource_ids
+                            required:
+                            - timeslots
+                        instant_chat_available:
+                          type: boolean
+                        instant_chat_timeslot:
+                          properties:
+                            start_time:
+                              type: string
+                              format: date-time
+                            end_time:
+                              type: string
+                              format: date-time
+                            job_id:
+                              type:
+                              - string
+                              - 'null'
+                            resource_ids:
+                              type: array
+                              items: {}
+                          required:
+                          - start_time
+                          - end_time
+                          - job_id
+                          - resource_ids
+                          type:
+                          - object
+                          - 'null'
+                      required:
+                      - timezone_name
+                      - timezone_utc_offset
+                      - availability_periods
+                      - instant_chat_available
+                      - instant_chat_timeslot
+          description: ''
+      tags:
+      - Showings
+  /listings/showings/:
+    post:
+      operationId: /listings/showings/
+      description: Create a new Showing
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                user_email:
+                  type: string
+                  writeOnly: true
+                  description: User's email address
+                user_name:
+                  type: string
+                  writeOnly: true
+                  description: User's full name
+                user_phonenumber:
+                  type: string
+                  writeOnly: true
+                  description: 'User''s phone number in e164 format.  Example: +15555555555'
+                user_short_bio:
+                  type: string
+                  writeOnly: true
+                  description: Short bio of the user creating a showing
+                property:
+                  type: string
+                  writeOnly: true
+                  description: The ID of the property being shown
+                start_time:
+                  type: string
+                  format: date-time
+                  writeOnly: true
+                  description: Start date and time of showing in UTC
+                end_time:
+                  type: string
+                  format: date-time
+                  writeOnly: true
+                  description: End date and time of showing in UTC
+                job_id:
+                  type:
+                  - string
+                  - 'null'
+                  description: For this showing to join an existing job, the existing job's ID can be passed in
+                is_virtual:
+                  type: boolean
+                  description: If set to true, creates the showing as virtual. Video links will be sent out and messaging reminders will have a different copy
+                is_group:
+                  type: boolean
+                  description: Determines if showings on this property are group based instead of individual based
+                utm_source:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM source for click campaigns
+                utm_campaign:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM campaign for click campaigns
+                utm_medium:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM medium for click campaigns
+                utm_term:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM term for click campaigns
+                utm_content:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM content for click campaigns
+                gclid:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: Google click ID for click campaigns
+              required:
+              - property
+              - start_time
+              - end_time
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                user_email:
+                  type: string
+                  writeOnly: true
+                  description: User's email address
+                user_name:
+                  type: string
+                  writeOnly: true
+                  description: User's full name
+                user_phonenumber:
+                  type: string
+                  writeOnly: true
+                  description: 'User''s phone number in e164 format.  Example: +15555555555'
+                user_short_bio:
+                  type: string
+                  writeOnly: true
+                  description: Short bio of the user creating a showing
+                property:
+                  type: string
+                  writeOnly: true
+                  description: The ID of the property being shown
+                start_time:
+                  type: string
+                  format: date-time
+                  writeOnly: true
+                  description: Start date and time of showing in UTC
+                end_time:
+                  type: string
+                  format: date-time
+                  writeOnly: true
+                  description: End date and time of showing in UTC
+                job_id:
+                  type:
+                  - string
+                  - 'null'
+                  description: For this showing to join an existing job, the existing job's ID can be passed in
+                is_virtual:
+                  type: boolean
+                  description: If set to true, creates the showing as virtual. Video links will be sent out and messaging reminders will have a different copy
+                is_group:
+                  type: boolean
+                  description: Determines if showings on this property are group based instead of individual based
+                utm_source:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM source for click campaigns
+                utm_campaign:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM campaign for click campaigns
+                utm_medium:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM medium for click campaigns
+                utm_term:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM term for click campaigns
+                utm_content:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM content for click campaigns
+                gclid:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: Google click ID for click campaigns
+              required:
+              - property
+              - start_time
+              - end_time
+          multipart/form-data:
+            schema:
+              properties:
+                user_email:
+                  type: string
+                  writeOnly: true
+                  description: User's email address
+                user_name:
+                  type: string
+                  writeOnly: true
+                  description: User's full name
+                user_phonenumber:
+                  type: string
+                  writeOnly: true
+                  description: 'User''s phone number in e164 format.  Example: +15555555555'
+                user_short_bio:
+                  type: string
+                  writeOnly: true
+                  description: Short bio of the user creating a showing
+                property:
+                  type: string
+                  writeOnly: true
+                  description: The ID of the property being shown
+                start_time:
+                  type: string
+                  format: date-time
+                  writeOnly: true
+                  description: Start date and time of showing in UTC
+                end_time:
+                  type: string
+                  format: date-time
+                  writeOnly: true
+                  description: End date and time of showing in UTC
+                job_id:
+                  type:
+                  - string
+                  - 'null'
+                  description: For this showing to join an existing job, the existing job's ID can be passed in
+                is_virtual:
+                  type: boolean
+                  description: If set to true, creates the showing as virtual. Video links will be sent out and messaging reminders will have a different copy
+                is_group:
+                  type: boolean
+                  description: Determines if showings on this property are group based instead of individual based
+                utm_source:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM source for click campaigns
+                utm_campaign:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM campaign for click campaigns
+                utm_medium:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM medium for click campaigns
+                utm_term:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM term for click campaigns
+                utm_content:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: UTM content for click campaigns
+                gclid:
+                  type:
+                  - string
+                  - 'null'
+                  writeOnly: true
+                  description: Google click ID for click campaigns
+              required:
+              - property
+              - start_time
+              - end_time
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  job_id:
+                    type:
+                    - string
+                    - 'null'
+                    description: For this showing to join an existing job, the existing job's ID can be passed in
+                  is_virtual:
+                    type: boolean
+                    description: If set to true, creates the showing as virtual. Video links will be sent out and messaging reminders will have a different copy
+                  is_group:
+                    type: boolean
+                    description: Determines if showings on this property are group based instead of individual based
+                  video_link:
+                    type: string
+                    readOnly: true
+                    description: Video link for connecting leads and showing agents
+                  fsa_name:
+                    type: string
+                    readOnly: true
+                    description: Name of the agent doing the showing
+                  fsa_photo:
+                    type: string
+                    readOnly: true
+                    description: Photo URL of the agent doing the showing
+                  market_contact_email:
+                    type: string
+                    readOnly: true
+                    description: Email address for the sales team in the market
+                  attendee_name:
+                    type: string
+                    readOnly: true
+                    description: Attendee's full name
+                  attendee_email:
+                    type: string
+                    readOnly: true
+                    description: Attendee's email address
+                  showing_start_time:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                    description: Start date and tiime of the showing in UTC
+                  location:
+                    type: string
+                    readOnly: true
+                    description: Location of the property being shown
+                  showing_duration:
+                    type: integer
+                    readOnly: true
+                    description: Duration of the showing in minutes
+          description: ''
+      tags:
+      - Showings
+x-tagGroups:
+- name: endpoints
+  tags:
+  - Markets
+  - Listings
+  - Showings
+  - Applications

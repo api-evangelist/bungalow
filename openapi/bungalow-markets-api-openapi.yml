@@ -1,0 +1,429 @@
+openapi: 3.2.0
+info:
+  title: Bungalow Markets API
+  version: ''
+  description: "# Getting Started\n\nIf you are looking to integrate Bungalow's property listings, we provide a number of helpful endpoints. For accessing our listings you have two primary options:\n\n## JSON API\n\nThis API is, for the most part, based on [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) principles. It uses HTTP response codes to indicate errors and HTTP verbs to describe requests. JSON is returned by all API responses, including errors.\n\nIn the endpoints section below, the `markets` and `listings` topics will provide you with a quick path to integration. Getting our listings will typically only require three endpoints: `/markets/`, `/listings/properties/` and `/listings/properties/{id_or_slug}`. Details on these individual calls can be found in the endpoints section below.\n\n## XML Feeds\n\nAs an alternative to the JSON API, we currently offer feeds in two formats: [Hotpads](https://filenet.hotpads.com/+guides/RentalListingsFeedGuide.pdf) and [Facebook Catalog](https://developers.facebook.com/docs/marketing-api/real-estate-ads/#feed-xml-example). [MITS](https://www.retall.org/wp-content/uploads/2019/04/Property-Marketing-ILS-4.1-Supplemental.html) may be supported in the future. The main advantage to using our XML feeds is that since they are authenticated, we can provide a broader range of fields than the public JSON API does. If you would like access to a feed for your organization, please send us a request to [integrations@bungalow.com](mailto:integrations@bungalow.com) including details about how you would like to use the feed and which format you would like to use.\n\nExample feed (Hotpads format):\n\n```xml\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<hotPadsItems version=\"2.1\">\n    <Company id=\"bungalow\">\n        <name>Bungalow</name>\n        <website>https://bungalow.com</website>\n        <city>San Francisco</city>\n        <state>CA</state>\n        <CompanyLogo source=\"https://assets.bungalow.com/logos/bungalow_symbol_dark.png\"></CompanyLogo>\n    </Company>\n    <Listing companyId=\"bungalow\" id=\"1\" propertyType=\"HOUSE\" type=\"ROOM\">\n        <description>PRICE DROP ON SHORT TERM LEASES\n \nWe lowered rent on all short term leases and added more flexibility on lease start dates -- Lock in a lease now for a move-in date up to 60 days out.  \n \nNEW VIDEO CHAT TOURS\n \nConnect with a Bungalow representative from your smartphone, tablet, or computer. Take a video tour of the home and get all your questions answered.\n \nMOVE-IN WITH A REDUCED SECURITY DEPOSIT\n \nThe Space...\n </description>\n        <virtualTourUrl>https://my.matterport.com/show/?m=mwiKGSegeLp&amp;utm_source=4</virtualTourUrl>\n        <name>Private Room in Contemporary Northwest District Home Near Union Station</name>\n        <website>https://bungalow.com/listings/portland/special-seasonal-rate-steps-from-the</website>\n        <price>995</price>\n        <city>Portland</city>\n        <state>OR</state>\n        <zip>97209</zip>\n        <country>US</country>\n        <latitude>45.52...</latitude>\n        <longitude>-122.68...</longitude>\n        <street hide=\"true\">1234 Some Street</street>\n        <contactEmail>portlandrentals@bungalow.com</contactEmail>\n        <contactMethodPreference>Email</contactMethodPreference>\n        <lastUpdated>2020-06-04T19:46:37.268526+00:00</lastUpdated>\n        <ListingTag type=\"DOGS_ALLOWED\">\n            <tag>False</tag>\n        </ListingTag>\n        <ListingTag type=\"LARGE_DOGS_ALLOWED\">\n            <tag>False</tag>\n        </ListingTag>\n        <ListingTag type=\"CATS_ALLOWED\">\n            <tag>False</tag>\n        </ListingTag>\n        <ListingTag type=\"PROPERTY_AMENITY\">\n            <tag>wifi</tag>\n        </ListingTag>\n        <ListingTag type=\"COOLING_SYSTEM\">\n            <tag>other</tag>\n        </ListingTag>\n        <ListingTag type=\"HEATING_SYSTEM\">\n            <tag>other</tag>\n        </ListingTag>\n        <numBedrooms>1</numBedrooms>\n        <numFullBaths>1</numFullBaths>\n        <numHalfBaths>0</numHalfBaths>\n        <dateAvailable>2020-04-01</dateAvailable>\n        <ListingTag type=\"AMENITY\">\n            <tag>Washer</tag>\n        </ListingTag>\n        <ListingTag type=\"AMENITY\">\n            <tag>Dishwasher</tag>\n        </ListingTag>\n        <ListingTag type=\"LAUNDRY\">\n            <tag>SHARED</tag>\n        </ListingTag>\n        <ListingTag type=\"PARKING_SPACES\">\n            <tag>0</tag>\n        </ListingTag>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/e4833c1ef4412485631c1bf3358eac6f409e55b4-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/70185d5e1cd35f15e5200899efb1536af7da347d-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/e65350af322a19b12a677f718725682214bf54ba-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/4476410f42949468b3cdf7cb070b2725a08fec5b-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/1519446e454be507177b97ca780e068517de1854-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/a819d06058220488909c67afed361e0fb8488462-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/245983ffc0f90534af1fc9a8bfc4d182ff5b1078-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/7aa88ca242d2a4ab26696628701a7f207e1e4fc9-lg.jpg\"></ListingPhoto>\n        <ListingPhoto source=\"https://dbjpekgzfghzs.cloudfront.net/541fd6af62101e212a1207640e7e5f7975cb7eb3-lg.jpg\"></ListingPhoto>\n        <terms>3-18 months</terms>\n        <Model id=\"4\" type=\"unit\">\n            <name>Master - 1</name>\n            <lowPrice>995</lowPrice>\n            <highPrice>995</highPrice>\n            <dateAvailable>2020-04-01</dateAvailable>\n            <squareFeet>99</squareFeet>\n            <ModelTag type=\"APPLICATION_FEE\">\n                <tag>0</tag>\n            </ModelTag>\n        </Model>\n        ...\n    </Listing>\n    ...\n</hotPadsItems>\n```\n\n## Lead Capture\n\nWhen a lead shows interest in one of our properties on your platform, in order to have the best possible lead experience, we ask that you **send us a webhook** with the lead data included. In order to have a webook configured for your platform, please send us a request to [integrations@bungalow.com](mailto:integrations@bungalow.com). Our webhook endpoint is flexible for data format and can support JSON or url-form-encoded formatting.\n\nExample webhook payload:\n\n```json\n{\n  \"property_id\": \"49801887334039362\",\n  \"property_name\": \"spacious-san-mateo-renovation-near\",\n  \"first_name\": \"Sterling\",\n  \"last_name\": \"Archer\",\n  \"email\": \"sarcher@example.com\",\n  \"phone\": \"5551234567\",\n  \"bio\": \"I’m not saying I invented the turtleneck, but I was the first person to realise its potential as a tactical garment. The tactical turtleneck! The… tactleneck.\",\n  \"max_budget\": 1500,\n  \"desired_move_in_date\": \"06-01-2020\",\n  \"student\": false,\n  \"work\": \"CIA\",\n  \"school\": \"Georgetown University\",\n  \"hobbies\": [\n    \"travel\",\n    \"sports\",\n    \"foodie\"\n  ]\n}\n```\n\n ### Required fields for Lead Capture:\n\nCasing is flexible, but `snake_case` is recommended.\n\n * `property_id`: the id of the property/listing object\n * `name`, or `first_name` and `last_name`: name of lead, can be a full name or separated first/last\n * `email`: email of lead\n\n# Errors\n\nError responses will always include a body of JSON data as below.\n\n    {\n        \"error\": {\n            \"code\": <status_code>,\n            \"type\": <unicode>,\n            \"message\": <unicode>,\n        *   \"field_errors\": {\n                \"<param_name>\": [<unicode>, ... ],\n                ...\n            },\n        *   \"non_field_errors\": [<unicode>, ... ],\n        *   \"conflict\": {\n                \"location\": <path>,\n                \"resource\": <representation>\n            }\n        }\n    }\n\n* starred attributes are conditionally present\n\n* `code` - the HTTP response code for the response - a little redundant, but makes the API much more browseable.\n* `type` - short string indicating the nature of the error. Possible values are listed in the [Types](#section/Errors/Types) section, and include things like “ValidationError”, “Throttled”, and “ServerError”.\n* `message` - textual description of the error which should go beyond the `code` and `type` in terms of informing the client what is going on exactly.\n* `field_errors` - dictionary of fields to error messages, to be returned when some client-provided data fails validation. Typically will be seen alongside a `ValidationError`.\n* `non_field_errors` - list of error messages for the client-provided data that might not pertain to specific fields.\n* `conflict.location` and `conflict.resource` will only be present for a `ConflictError`.\n\n## Types\n\n### ValidationError\n\n`400` - There were one or more validation errors with the provided data.\n\nAll our error types (as seen below) will contain at minimum the `code`, `type` and `message` components. However, the `ValidationError` will include further information to let you know what was wrong with your data submission.\n\n#### Field Errors\n\nIf the `field_errors` key is present in the error response, it will map a list of errors to specific fields, clearly indicating what data was problematic.\n\n    {\n        \"error\": {\n            \"message\": \"There were one or more validation errors with the provided data.\",\n            \"code\": 400,\n            \"type\": \"ValidationError\",\n            \"field_errors\": {\n                \"access_token\": [\n                    \"`access_token` cannot be None.\"\n                ]\n            }\n        }\n    }\n\n#### Non Field Errors\n\nYou may also receive further information in a form that is not specific to any particular field. This will be present in a list keyed on `non_field_errors` as part of a `ValidationError`.\n\n    {\n        \"error\": {\n            \"message\": \"There were one or more validation errors with the provided data.\",\n            \"code\": 400,\n            \"type\": \"ValidationError\",\n            \"non_field_errors\": [\n                \"That account has been closed.\"\n            ]\n        }\n    }\n\n\n### ParseError\n\n`400` - Malformed request.\n\n### AuthenticationFailed\n`401` - Incorrect authentication credentials.\n\nThe token you are submitting may be malformed, invalid or expired. Use one of the supported authentication methods to get a new token and try again.\n\n### NotAuthenticated\n\n`401` - Authentication credentials were not provided.\n\nA 'WWW-Authenticate' header will be present in the response, indicating to the client how they can go about authenticating.\n\n### InvalidToken\n\n`401` - The refresh or access token provided has expired or is malformed.\n\nIf you receive this message for an access token, you should use your refresh token to get a new access token and try the request again.\n\nIf you receive it for a refresh token, you should prompt the user to log in to get a new refresh token.\n\n### PermissionDenied\n\n`403` - You do not have permission to perform this action.\n\nYour request is authenticated, but the related user does not have permission to\nperform the action you're trying perform, or to access the data you're trying to\naccess.\n\n### NotFound\n\n`404` - Not found.\n\n### MethodNotAllowed\n\n`405` - Method \"{method}\" not allowed.\n\n### NotAcceptable\n\n`406` - Could not satisfy the request Accept header.\n\n### Conflict\n\n`409` - The submitted data conflicts with existing data.\n\nIn the case of a `Conflict` the additional attributes `conflict.location` and `conflict.resource` will be in the response body, providing detail of the conflicting resource.\n\nFor example:\n\n    {\n        \"error\": {\n            \"code\": 409,\n            \"type\": \"Conflict\",\n            \"message\": \"You've already added that number!\",\n            \"conflict\": {\n                \"location\": \"/api/v1/phones/numbers/1\",\n                \"resource\": {\n                    \"id\": 1,\n                    \"number\": \"+17788486723\",\n                    \"primary\": null,\n                    \"verified\": false,\n                    \"created\": \"2018-09-25T21:45:07.165829Z\"\n                }\n            }\n        }\n    }\n\n### Gone ###\n`410` - The requested resource no longer exists.\n\nWhen a resource was available, but has been taken or no longer exists.\n\nFor example:\n\n    {\n        \"error\": {\n            \"code\": 410,\n            \"type\": \"APIGoneError\",\n            \"message\": \"The requested resource no longer exists.\",\n            \"non_field_errors\": [\n                \"This timeslot is no longer available. Please select another time.\"\n            ]\n        }\n    }\n\n### UnsupportedMediaType\n\n`415` - Unsupported media type \"{media_type}\" in request.\n\n### Throttled\n\n`429` - Request was throttled.\n\nFor example:\n\n    {\n        \"error\": {\n            \"message\": \"Request was throttled. Expected available in 3 seconds.\",\n            \"code\": 429,\n            \"type\": \"Throttled\"\n        }\n    }\n\nIn the case of a throttled request, a `Retry-After` header will specify how long the user should wait before trying the API call again.\n\n\n### ServerError\n\n`500` - Server Error.\n\nSomething broke in the API; we'll have been notified and will fix it, in the meantime, try again.\n\n# Pagination\n\nAcross all resource listing endpoints a standardised approach to pagination is used. A typical paginated response appears below.\n\n    {\n        \"results\": [\n            <type>, ..\n        ],\n        \"count\": <int>,\n        \"next\": <url>,\n        \"previous\": <url>\n    }\n\n* `results` - the result set\n* `count` - the total number results\n* `next` - URL for the next result set\n* `previous` - URL for the previous result set\n\n### Parameters ###\n\nResults can be iteratively fetched using `limit` and `offset` parameters.\n\n* `limit` - return at most this many results. Default: 20, max: 100\n* `offset` - return results after this point. Default: 0\n\n# Versioning\n\nYou can control what version of the API you access by manipulating the path. For example, the following would access version 1.X of the API:\n\n    /api/v1/path/to/specific/endpoint\n\nWe use [semantic versioning](https://semver.org/#semantic-versioning-200) so within major versions you do not have to worry about changes breaking backward compatibility.\n"
+  x-logo:
+    url: https://assets.bungalow.com/logos/bungalow_wordmark_dark.png
+    altText: Bungalow wordmark
+servers:
+- url: https://fieldstone.bungalow.com/api/v1/
+tags:
+- name: Markets
+  description: A market is a generalized geographical area that often represents a city (e.g. Seattle, Boston), but can also represent a broader metropolitan area (e.g. Bay Area).
+  x-order: 1
+paths:
+  /markets/:
+    get:
+      operationId: /markets/
+      description: Lists all active markets
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type:
+                    - string
+                    - 'null'
+                  previous:
+                    type:
+                    - string
+                    - 'null'
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        internal_name:
+                          type: string
+                          maxLength: 256
+                        display_name:
+                          type: string
+                          maxLength: 256
+                        slug:
+                          type:
+                          - string
+                          - 'null'
+                          maxLength: 50
+                          pattern: ^[-a-zA-Z0-9_]+$
+                        email:
+                          type: string
+                          description: Market specific email i.e la@bungalow.com which accepts messages from robots
+                          maxLength: 128
+                        region:
+                          type: string
+                          maxLength: 64
+                        region_code:
+                          type: string
+                          maxLength: 3
+                        country:
+                          type: string
+                          maxLength: 128
+                        country_code:
+                          type: string
+                          description: Alpha-2 ISO 3166 code
+                          maxLength: 2
+                        img:
+                          type: string
+                          format: uri
+                          maxLength: 200
+                          pattern: "^(?:[a-z0-9\\.\\-\\+]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:\\.]+\\]|([a-z¡-\uFFFF0-9](?:[a-z¡-\uFFFF0-9-]{0,61}[a-z¡-\uFFFF0-9])?(?:\\.(?!-)[a-z¡-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{2,5})?(?:[/?#][^\\s]*)?\\Z"
+                        img_md:
+                          type: string
+                          format: uri
+                          maxLength: 200
+                          pattern: "^(?:[a-z0-9\\.\\-\\+]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:\\.]+\\]|([a-z¡-\uFFFF0-9](?:[a-z¡-\uFFFF0-9-]{0,61}[a-z¡-\uFFFF0-9])?(?:\\.(?!-)[a-z¡-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{2,5})?(?:[/?#][^\\s]*)?\\Z"
+                        hide_room_details:
+                          type: boolean
+                        rent_premiums:
+                          type: array
+                          items:
+                            properties:
+                              lease_length_in_months:
+                                type: integer
+                                maximum: 2147483647
+                                minimum: 0
+                              premium_per_month:
+                                type: number
+                                multipleOf: 0.01
+                                maximum: 10000000000000
+                                minimum: -10000000000000
+                            required:
+                            - lease_length_in_months
+                            - premium_per_month
+                        icons:
+                          properties:
+                            small:
+                              type: string
+                              format: binary
+                            medium:
+                              type: string
+                              format: binary
+                            large:
+                              type: string
+                              format: binary
+                            svg:
+                              type: string
+                              format: binary
+                          required:
+                          - small
+                          - medium
+                          - large
+                          - svg
+                          type: object
+                        timezone:
+                          type: string
+                        latitude:
+                          type: string
+                        longitude:
+                          type: string
+                        market_info:
+                          type: string
+                          readOnly: true
+                        market_area:
+                          properties:
+                            id:
+                              type: integer
+                              readOnly: true
+                            slug:
+                              type:
+                              - string
+                              - 'null'
+                              description: Hyphenated lower case form, can be used as part of URL
+                              maxLength: 250
+                              pattern: ^[-a-zA-Z0-9_]+$
+                            name:
+                              type: string
+                              maxLength: 128
+                            area_type:
+                              type:
+                              - string
+                              - 'null'
+                              description: Type of area, e.g Neighborhood, Market, et. al
+                            geohash:
+                              type: string
+                              description: The geohash prefix that falls in and round this area (ideal for filtering in a client interface).
+                              maxLength: 9
+                            bounds_north:
+                              type: number
+                              multipleOf: 1.0e-06
+                              maximum: 1000
+                              minimum: -1000
+                              description: The max latitude
+                            bounds_south:
+                              type: number
+                              multipleOf: 1.0e-06
+                              maximum: 1000
+                              minimum: -1000
+                              description: The min latitude
+                            bounds_west:
+                              type: number
+                              multipleOf: 1.0e-06
+                              maximum: 1000
+                              minimum: -1000
+                              description: The min longitude
+                            bounds_east:
+                              type: number
+                              multipleOf: 1.0e-06
+                              maximum: 1000
+                              minimum: -1000
+                              description: The max longitude
+                            latitude:
+                              type: number
+                              multipleOf: 1.0e-06
+                              maximum: 1000
+                              minimum: -1000
+                              description: The centerpoint latitude
+                            longitude:
+                              type: number
+                              multipleOf: 1.0e-06
+                              maximum: 1000
+                              minimum: -1000
+                              description: The centerpoint longitude
+                          required:
+                          - name
+                          - bounds_north
+                          - bounds_south
+                          - bounds_west
+                          - bounds_east
+                          - latitude
+                          - longitude
+                          type: object
+                        support_operating_hours:
+                          type: string
+                          readOnly: true
+                        waive_application_fees:
+                          type: boolean
+                      required:
+                      - internal_name
+                      - display_name
+                      - rent_premiums
+                      - icons
+                      - timezone
+                      - market_area
+                      - waive_application_fees
+          description: ''
+      tags:
+      - Markets
+  /markets/{id}:
+    get:
+      operationId: /markets/{id}
+      description: Gets all details of a market, and includes demand metrics
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this market.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  internal_name:
+                    type: string
+                    maxLength: 256
+                  display_name:
+                    type: string
+                    maxLength: 256
+                  slug:
+                    type:
+                    - string
+                    - 'null'
+                    maxLength: 50
+                    pattern: ^[-a-zA-Z0-9_]+$
+                  email:
+                    type: string
+                    description: Market specific email i.e la@bungalow.com which accepts messages from robots
+                    maxLength: 128
+                  region:
+                    type: string
+                    maxLength: 64
+                  region_code:
+                    type: string
+                    maxLength: 3
+                  country:
+                    type: string
+                    maxLength: 128
+                  country_code:
+                    type: string
+                    description: Alpha-2 ISO 3166 code
+                    maxLength: 2
+                  img:
+                    type: string
+                    format: uri
+                    maxLength: 200
+                    pattern: "^(?:[a-z0-9\\.\\-\\+]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:\\.]+\\]|([a-z¡-\uFFFF0-9](?:[a-z¡-\uFFFF0-9-]{0,61}[a-z¡-\uFFFF0-9])?(?:\\.(?!-)[a-z¡-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{2,5})?(?:[/?#][^\\s]*)?\\Z"
+                  img_md:
+                    type: string
+                    format: uri
+                    maxLength: 200
+                    pattern: "^(?:[a-z0-9\\.\\-\\+]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:\\.]+\\]|([a-z¡-\uFFFF0-9](?:[a-z¡-\uFFFF0-9-]{0,61}[a-z¡-\uFFFF0-9])?(?:\\.(?!-)[a-z¡-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{2,5})?(?:[/?#][^\\s]*)?\\Z"
+                  hide_room_details:
+                    type: boolean
+                  rent_premiums:
+                    type: array
+                    items:
+                      properties:
+                        lease_length_in_months:
+                          type: integer
+                          maximum: 2147483647
+                          minimum: 0
+                        premium_per_month:
+                          type: number
+                          multipleOf: 0.01
+                          maximum: 10000000000000
+                          minimum: -10000000000000
+                      required:
+                      - lease_length_in_months
+                      - premium_per_month
+                  icons:
+                    properties:
+                      small:
+                        type: string
+                        format: binary
+                      medium:
+                        type: string
+                        format: binary
+                      large:
+                        type: string
+                        format: binary
+                      svg:
+                        type: string
+                        format: binary
+                    required:
+                    - small
+                    - medium
+                    - large
+                    - svg
+                    type: object
+                  timezone:
+                    type: string
+                  latitude:
+                    type: string
+                  longitude:
+                    type: string
+                  market_info:
+                    type: string
+                    readOnly: true
+                  market_area:
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      slug:
+                        type:
+                        - string
+                        - 'null'
+                        description: Hyphenated lower case form, can be used as part of URL
+                        maxLength: 250
+                        pattern: ^[-a-zA-Z0-9_]+$
+                      name:
+                        type: string
+                        maxLength: 128
+                      area_type:
+                        type:
+                        - string
+                        - 'null'
+                        description: Type of area, e.g Neighborhood, Market, et. al
+                      geohash:
+                        type: string
+                        description: The geohash prefix that falls in and round this area (ideal for filtering in a client interface).
+                        maxLength: 9
+                      bounds_north:
+                        type: number
+                        multipleOf: 1.0e-06
+                        maximum: 1000
+                        minimum: -1000
+                        description: The max latitude
+                      bounds_south:
+                        type: number
+                        multipleOf: 1.0e-06
+                        maximum: 1000
+                        minimum: -1000
+                        description: The min latitude
+                      bounds_west:
+                        type: number
+                        multipleOf: 1.0e-06
+                        maximum: 1000
+                        minimum: -1000
+                        description: The min longitude
+                      bounds_east:
+                        type: number
+                        multipleOf: 1.0e-06
+                        maximum: 1000
+                        minimum: -1000
+                        description: The max longitude
+                      latitude:
+                        type: number
+                        multipleOf: 1.0e-06
+                        maximum: 1000
+                        minimum: -1000
+                        description: The centerpoint latitude
+                      longitude:
+                        type: number
+                        multipleOf: 1.0e-06
+                        maximum: 1000
+                        minimum: -1000
+                        description: The centerpoint longitude
+                    required:
+                    - name
+                    - bounds_north
+                    - bounds_south
+                    - bounds_west
+                    - bounds_east
+                    - latitude
+                    - longitude
+                    type: object
+                  support_operating_hours:
+                    type: string
+                    readOnly: true
+                  waive_application_fees:
+                    type: boolean
+                  neighborhoods:
+                    type: string
+                    readOnly: true
+                required:
+                - internal_name
+                - display_name
+                - rent_premiums
+                - icons
+                - timezone
+                - market_area
+                - waive_application_fees
+          description: ''
+      tags:
+      - Markets
+x-tagGroups:
+- name: endpoints
+  tags:
+  - Markets
+  - Listings
+  - Showings
+  - Applications
