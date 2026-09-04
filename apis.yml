@@ -25,6 +25,19 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source:
+  - authentication
+  - security
+  generated: '2026-09-02'
+  method: derived
 image: https://assets.bungalow.com/home-page/header/header-hero-min.png?h=630&w=1200&auto=format
 url: https://raw.githubusercontent.com/api-evangelist/bungalow/refs/heads/main/apis.yml
 x-type: company
@@ -203,8 +216,9 @@ common:
 - type: CapabilityMap
   url: capabilities/bungalow-capability-edges.yml
   name: Bungalow Business Capability Map
-- type: MCPServer
+- type: X-MCPServerCandidate
   url: mcp/bungalow-mcp.yml
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
 - type: Website
   url: https://bungalow.com/
 - type: DeveloperPortal
