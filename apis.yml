@@ -1,18 +1,17 @@
 aid: bungalow
 name: Bungalow
-description: >-
-  Bungalow is a US residential rental platform for single-family homes, operating both a co-living
-  ("Coliving Home") product where individual rooms in a house are leased to separately screened
-  housemates and a whole-home ("Group Home") product leased to a single group. Founded in 2017 by
-  Andrew Collins and Justin McCarty and headquartered in Miami, FL, the company pairs a renter-facing
-  marketplace and mobile app with a homeowner property-management portal and an SFR investment service
-  ("Radar Powered by Bungalow") covering sourcing, underwriting, renovation and management. Bungalow
-  publishes a small, anonymous, read-mostly public REST API — the Bungalow API at
-  fieldstone.bungalow.com — so that third-party listing sites, rental search portals and partner
-  platforms can syndicate its markets and property listings, retrieve showing availability, book a
-  showing, and submit an application source. Authenticated Hotpads and Facebook Catalog XML feeds are
-  offered to approved integration partners as a richer alternative, and partners are asked to post
-  lead-capture webhooks back to Bungalow. Active in roughly 23 markets across the United States.
+description: Bungalow is a US residential rental platform for single-family homes, operating both a co-living
+  ("Coliving Home") product where individual rooms in a house are leased to separately screened housemates
+  and a whole-home ("Group Home") product leased to a single group. Founded in 2017 by Andrew Collins
+  and Justin McCarty and headquartered in Miami, FL, the company pairs a renter-facing marketplace and
+  mobile app with a homeowner property-management portal and an SFR investment service ("Radar Powered
+  by Bungalow") covering sourcing, underwriting, renovation and management. Bungalow publishes a small,
+  anonymous, read-mostly public REST API — the Bungalow API at fieldstone.bungalow.com — so that third-party
+  listing sites, rental search portals and partner platforms can syndicate its markets and property listings,
+  retrieve showing availability, book a showing, and submit an application source. Authenticated Hotpads
+  and Facebook Catalog XML feeds are offered to approved integration partners as a richer alternative,
+  and partners are asked to post lead-capture webhooks back to Bungalow. Active in roughly 23 markets
+  across the United States.
 deliveryModel:
   model: saas
   open_source: false
@@ -44,7 +43,7 @@ x-type: company
 x-source: harvest:secondary-market
 specificationVersion: '0.23'
 created: '2026-08-01'
-modified: '2026-08-01'
+modified: '2026-09-16'
 tags:
 - Company
 - Real-Estate
@@ -100,8 +99,7 @@ apis:
     url: asyncapi/bungalow-webhooks.yml
 - aid: bungalow:bungalow-listings-api
   name: Bungalow Listings API
-  description: >-
-    Listings endpoints allow you to get all listings in a market or a singular property.
+  description: 'Listings endpoints allow you to get all listings in a market or a singular property.
 
 
     Rooms within properties can become marketable before the room is vacant, generally if
@@ -127,7 +125,7 @@ apis:
 
     Bungalow requests that third-party listings sites only post a listing if there is less
 
-    than 30 days until the earliest availability date.
+    than 30 days until the earliest availability date.'
   humanURL: https://fieldstone.bungalow.com/api/v1/docs/
   baseURL: https://fieldstone.bungalow.com/api/v1/
   tags:
@@ -153,9 +151,8 @@ apis:
     url: asyncapi/bungalow-webhooks.yml
 - aid: bungalow:bungalow-markets-api
   name: Bungalow Markets API
-  description: >-
-    A market is a generalized geographical area that often represents a city (e.g. Seattle, Boston), but
-    can also represent a broader metropolitan area (e.g. Bay Area).
+  description: A market is a generalized geographical area that often represents a city (e.g. Seattle,
+    Boston), but can also represent a broader metropolitan area (e.g. Bay Area).
   humanURL: https://fieldstone.bungalow.com/api/v1/docs/
   baseURL: https://fieldstone.bungalow.com/api/v1/
   tags:
@@ -181,9 +178,8 @@ apis:
     url: asyncapi/bungalow-webhooks.yml
 - aid: bungalow:bungalow-showings-api
   name: Bungalow Showings API
-  description: >-
-    These two endpoints will give you everything you need to get booking availability, as well as create
-    a showing at a given property.
+  description: These two endpoints will give you everything you need to get booking availability, as well
+    as create a showing at a given property.
   humanURL: https://fieldstone.bungalow.com/api/v1/docs/
   baseURL: https://fieldstone.bungalow.com/api/v1/
   tags:
@@ -218,7 +214,10 @@ common:
   name: Bungalow Business Capability Map
 - type: X-MCPServerCandidate
   url: mcp/bungalow-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate
+    — a tool list derived from the published API contracts, not an existing server. The scorer already
+    read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type
+    surfaces with a server that does not exist.'
 - type: Website
   url: https://bungalow.com/
 - type: DeveloperPortal
@@ -250,7 +249,7 @@ common:
 - type: Careers
   url: https://bungalow.com/careers
 - type: OpenAPI
-  url: openapi/bungalow-openapi-original.yml
+  url: openapi/_original/bungalow-openapi-original.yml
 - type: Overlay
   url: overlays/bungalow-openapi-original-overlay.yaml
 - type: Authentication
