@@ -1,0 +1,28 @@
+{
+  "provider": "bungalow",
+  "sources": [
+    "_original/bungalow-openapi-original.yml"
+  ],
+  "outputs": [
+    "bungalow-applications-api-openapi.yml",
+    "bungalow-listings-api-openapi.yml",
+    "bungalow-markets-api-openapi.yml",
+    "bungalow-showings-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [
+    "bungalow-openapi-original.yml: info.version missing"
+  ],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "bungalow-openapi-original.yml: upgraded openapi 3.0.2 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "bungalow-applications-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bungalow-listings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bungalow-markets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bungalow-showings-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
