@@ -46,7 +46,7 @@ created: '2026-08-01'
 modified: '2026-09-16'
 tags:
 - Company
-- Real-Estate
+- Real Estate
 - Residential Real Estate
 - Rental Listings
 - Property Management
@@ -68,6 +68,7 @@ tags_raw:
 - housing
 - proptech
 - marketplace
+- Real-Estate
 apis:
 - aid: bungalow:bungalow-applications-api
   name: Bungalow Applications API
