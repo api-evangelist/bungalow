@@ -64,67 +64,115 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Bungalow is a US residential rental platform for single-family homes, operating both a co-living
-product (individual rooms in a house leased to separately screened housemates) and a whole-home
-product (a house leased to a single group). Founded in 2017 by Andrew Collins and Justin McCarty,
-headquartered in Miami, FL, active in roughly 23 US markets.
+Bungalow is a US residential rental platform for single-family homes, operating both a co-living ("Coliving Home") product where individual rooms in a house are leased to separately screened housemates and a whole-home ("Group Home") product leased to a single group. Founded in 2017 by Andrew Collins and Justin McCarty and headquartered in Miami, FL, the company pairs a renter-facing marketplace and mobile app with a homeowner property-management portal and an SFR investment service ("Radar Powered by Bungalow") covering sourcing, underwriting, renovation and management. Bungalow publishes a small, anonymous, read-mostly public REST API — the Bungalow API at fieldstone.bungalow.com — so that third-party listing sites, rental search portals and partner platforms can syndicate its markets and property listings, retrieve showing availability, book a showing, and submit an application source. Authenticated Hotpads and Facebook Catalog XML feeds are offered to approved integration partners as a richer alternative, and partners are asked to post lead-capture webhooks back to Bungalow. Active in roughly 23 markets across the United States.
 
-- Website: https://bungalow.com/
-- API reference: https://fieldstone.bungalow.com/api/v1/docs/
-- Live OpenAPI: https://fieldstone.bungalow.com/api/v1/open-api-schema/
+**Areas:** Company · Real Estate · Residential Real Estate · Rental Listings · Property Management · Co-Living · Single-Family Rental · Listings Syndication · Housing · PropTech · Marketplace
 
-## The API
+## Bungalow on APIs.io
 
-Bungalow publishes a small, **anonymous**, read-mostly public REST API so that third-party listing
-sites and rental portals can syndicate its inventory. Seven operations across four tags — Markets,
-Listings, Showings, Applications. Verified callable with no credentials on 2026-08-01.
+Everything profiled for Bungalow is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/bungalow/](https://apis.io/providers/bungalow/)** — or go straight to one of the APIs or properties below.
 
-The spec is not linked from bungalow.com's navigation, robots.txt or sitemap. It is reachable only
-via a single sentence on the About page pointing at `fieldstone.bungalow.com/api/v1/docs/`, whose
-Redoc shell loads the real document from `/api/v1/open-api-schema/`.
+### APIs (4)
 
-| | |
+- [Bungalow Applications API](https://apis.io/apis/bungalow/bungalow-applications-api/) — The Applications API from Bungalow — 1 operation(s) for applications.
+- [Bungalow Listings API](https://apis.io/apis/bungalow/bungalow-listings-api/) — Listings endpoints allow you to get all listings in a market or a singular property. Rooms within properties can become marketable before the room is…
+- [Bungalow Markets API](https://apis.io/apis/bungalow/bungalow-markets-api/) — A market is a generalized geographical area that often represents a city (e.g. Seattle, Boston), but can also represent a broader metropolitan area (e.g.…
+- [Bungalow Showings API](https://apis.io/apis/bungalow/bungalow-showings-api/) — These two endpoints will give you everything you need to get booking availability, as well as create a showing at a given property.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Bungalow Webhooks](https://apis.io/asyncapis/bungalow/bungalow-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [bungalow](https://apis.io/servers/bungalow/bungalow/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Bungalow Openapi Original Overlay](https://apis.io/overlays/bungalow/bungalow-openapi-original-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Bungalow Authentication](https://apis.io/security/bungalow/bungalow-authentication/)
+- [Bungalow Domain Security](https://apis.io/security/bungalow/bungalow-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://bungalow.com/)
+- [Documentation](https://fieldstone.bungalow.com/api/v1/docs/)
+- [Getting started](https://fieldstone.bungalow.com/api/v1/docs/#section/Getting-Started)
+- [API reference](https://fieldstone.bungalow.com/api/v1/docs/)
+- [Sign up](https://bungalow.com/signup)
+- [Support](https://bungalow.com/faq)
+- [Blog](https://bungalow.com/articles)
+- [Terms of service](https://bungalow.com/terms-of-use)
+- [Privacy policy](https://bungalow.com/privacy-policy)
+
+## API Evangelist rating
+
+**Kin Score 39.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
 |---|---|
-| Base URL | `https://fieldstone.bungalow.com/api/v1/` |
-| Auth | none (public JSON API) |
-| Pagination | `limit` (default 20, max 100) / `offset`; `{results, count, next, previous}` |
-| Versioning | URI path `/api/v1/`, semver within major versions |
-| Errors | proprietary `{"error": {code, type, message}}` envelope — **not** RFC 9457 |
-| Idempotency | none |
-| Events | none outbound; one inbound partner lead-capture webhook |
+| Discoverability | 74.1 |
+| Contract quality | 49.4 |
+| Contract governance | 4.5 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 58.9 |
+| Access clarity | 27.6 |
 
-Partner-gated alternatives: authenticated **Hotpads** and **Facebook Catalog** XML feeds carrying a
-richer field set than the public API (MITS listed as possible future support). Request via
-`integrations@bungalow.com`.
+**Agent readiness 28.1** — agent-aware
 
-## Artifacts
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | — |
 
-| Dir | File | Method |
-|---|---|---|
-| `openapi/` | `bungalow-openapi-original.yml` | searched (verbatim, 105 KB, OpenAPI 3.0.2) |
-| `overlays/` | `bungalow-openapi-original-overlay.yaml` | generated |
-| `authentication/` | `bungalow-authentication.yml` | searched |
-| `conventions/` | `bungalow-conventions.yml` | searched |
-| `errors/` | `bungalow-problem-types.yml` | searched (14 error types) |
-| `data-model/` | `bungalow-data-model.yml` | derived (9 entities, 13 relationships) |
-| `lifecycle/` | `bungalow-lifecycle.yml` | searched |
-| `conformance/` | `bungalow-conformance.yml` | derived |
-| `asyncapi/` | `bungalow-webhooks.yml` | searched (inbound webhook only) |
-| `mcp/` | `bungalow-mcp.yml`, `bungalow-tool-crosswalk.yml` | derived (candidate) |
-| `skills/` | 3 skills + `_index.yml` | generated |
-| `llms/` | `bungalow-llms.txt` | generated |
-| `well-known/` | `bungalow-well-known.yml` | probed (nothing found) |
-| `security/` | `bungalow-domain-security.yml` | probed |
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
 
-## Known gaps in the provider's contract
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/bungalow/](https://apis.io/providers/bungalow/).
 
-1. **No error responses in the spec.** All seven operations declare only `200`, while the docs
-   describe fourteen error classes in prose. Highest-leverage fix available.
-2. **No `components.schemas`.** Every schema is inline and duplicated — the Market object appears in
-   full four times.
-3. **Path-shaped operationIds** (`/listings/properties/`) rather than verb-noun identifiers.
-4. **Empty `info.version`.**
-5. **No operation summaries** — descriptions only.
-6. **Id wire-type divergence** — declared `integer`, returned as decimal strings.
-7. No security.txt, no vulnerability disclosure program, no trust center, no status page, no
-   changelog, no deprecation policy, no SDKs, no CLI, no sandbox, no DNSSEC, no CAA.
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Bungalow: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/bungalow/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
